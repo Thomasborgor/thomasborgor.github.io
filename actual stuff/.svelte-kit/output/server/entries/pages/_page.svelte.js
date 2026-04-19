@@ -1,5 +1,5 @@
-import { d as set_current_component, f as current_component, r as run_all, o as onDestroy, h as get_store_value, i as createEventDispatcher, s as setContext, g as getContext, c as create_ssr_component, j as compute_rest_props, b as subscribe, k as spread, l as escape_object, a as add_attribute, n as escape_attribute_value, v as validate_component, e as escape, p as each } from "../../chunks/ssr.js";
-import { c as convertScale, b as balance, w as winRecords, f as formatCurrency, t as totalProfitHistory, i as isAnimationOn, p as plinkoEngine, a as betAmount, d as betAmountOfExistingBalls, r as riskLevel, e as rowCount, B as BetMode, R as RiskLevel, g as rowCountOptions, P as Plinko } from "../../chunks/Plinko.js";
+import { d as set_current_component, f as current_component, r as run_all, o as onDestroy, h as get_store_value, i as createEventDispatcher, c as create_ssr_component, j as compute_rest_props, k as spread, l as escape_attribute_value, n as escape_object, a as add_attribute, s as setContext, g as getContext, b as subscribe, v as validate_component, e as escape, p as each } from "../../chunks/ssr.js";
+import { c as convertScale, b as balance, w as winRecords, f as formatCurrency, t as totalProfitHistory, i as isAnimationOn, a as bounciness, r as rowCount, d as riskLevel, e as autoBetIntervalMs, p as plinkoEngine, g as betAmount, h as betAmountOfExistingBalls, B as BetMode, R as RiskLevel, j as rowCountOptions, P as Plinko } from "../../chunks/Plinko.js";
 import "dequal";
 import { d as derived, w as writable, r as readable, a as readonly } from "../../chunks/index.js";
 import { o as onMount } from "../../chunks/ssr2.js";
@@ -80,6 +80,10 @@ function update($$) {
     $$.fragment && $$.fragment.p($$.ctx, dirty);
     $$.after_update.forEach(add_render_callback);
   }
+}
+const void_element_names = /^(?:area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)$/;
+function is_void(name2) {
+  return void_element_names.test(name2) || name2.toLowerCase() === "!doctype";
 }
 const logo = "/_app/immutable/assets/logo.Bq7oLjZC.svg";
 function cubicOut(t) {
@@ -1796,6 +1800,57 @@ function getOptionUpdater(options) {
     }
   };
 }
+function getAttrs(builders) {
+  const attrs = {};
+  builders.forEach((builder) => {
+    Object.keys(builder).forEach((key) => {
+      if (key !== "action") {
+        attrs[key] = builder[key];
+      }
+    });
+  });
+  return attrs;
+}
+const Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["href", "type", "builders", "el"]);
+  let { href = void 0 } = $$props;
+  let { type = void 0 } = $$props;
+  let { builders = [] } = $$props;
+  let { el = void 0 } = $$props;
+  const attrs = { "data-button-root": "" };
+  if ($$props.href === void 0 && $$bindings.href && href !== void 0) $$bindings.href(href);
+  if ($$props.type === void 0 && $$bindings.type && type !== void 0) $$bindings.type(type);
+  if ($$props.builders === void 0 && $$bindings.builders && builders !== void 0) $$bindings.builders(builders);
+  if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
+  return `${builders && builders.length ? ` ${((tag) => {
+    return tag ? `<${href ? "a" : "button"}${spread(
+      [
+        {
+          type: escape_attribute_value(href ? void 0 : type)
+        },
+        { href: escape_attribute_value(href) },
+        { tabindex: "0" },
+        escape_object(getAttrs(builders)),
+        escape_object($$restProps),
+        escape_object(attrs)
+      ],
+      {}
+    )}${add_attribute("this", el, 0)}>${is_void(tag) ? "" : `${slots.default ? slots.default({}) : ``}`}${is_void(tag) ? "" : `</${tag}>`}` : "";
+  })(href ? "a" : "button")}` : ` ${((tag) => {
+    return tag ? `<${href ? "a" : "button"}${spread(
+      [
+        {
+          type: escape_attribute_value(href ? void 0 : type)
+        },
+        { href: escape_attribute_value(href) },
+        { tabindex: "0" },
+        escape_object($$restProps),
+        escape_object(attrs)
+      ],
+      {}
+    )}${add_attribute("this", el, 0)}>${is_void(tag) ? "" : `${slots.default ? slots.default({}) : ``}`}${is_void(tag) ? "" : `</${tag}>`}` : "";
+  })(href ? "a" : "button")}`}`;
+});
 function getPositioningUpdater(store) {
   return (props = {}) => {
     return updatePositioning$2(store, props);
@@ -1850,7 +1905,7 @@ function getPopoverData() {
 }
 function setCtx$2(props) {
   const { NAME, PARTS } = getPopoverData();
-  const getAttrs = createBitAttrs(NAME, PARTS);
+  const getAttrs2 = createBitAttrs(NAME, PARTS);
   const popover = {
     ...createPopover({
       positioning: {
@@ -1860,7 +1915,7 @@ function setCtx$2(props) {
       ...removeUndefined(props),
       forceVisible: true
     }),
-    getAttrs
+    getAttrs: getAttrs2
   };
   setContext(NAME, popover);
   return {
@@ -1890,10 +1945,10 @@ function updatePositioning$1(props) {
 function getLabelData() {
   const NAME = "label";
   const PARTS = ["root"];
-  const getAttrs = createBitAttrs(NAME, PARTS);
+  const getAttrs2 = createBitAttrs(NAME, PARTS);
   return {
     NAME,
-    getAttrs
+    getAttrs: getAttrs2
   };
 }
 const Label = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -1905,8 +1960,8 @@ const Label = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const { elements: { root } } = createLabel();
   $$unsubscribe_root = subscribe(root, (value) => $root = value);
   createDispatcher();
-  const { getAttrs } = getLabelData();
-  const attrs = getAttrs("root");
+  const { getAttrs: getAttrs2 } = getLabelData();
+  const attrs = getAttrs2("root");
   if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0) $$bindings.asChild(asChild);
   if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
   builder = $root;
@@ -1994,9 +2049,9 @@ const Popover_arrow = create_ssr_component(($$result, $$props, $$bindings, slots
   let { asChild = false } = $$props;
   let { el = void 0 } = $$props;
   let { size: size2 = 8 } = $$props;
-  const { elements: { arrow: arrow2 }, getAttrs } = setArrow$1(size2);
+  const { elements: { arrow: arrow2 }, getAttrs: getAttrs2 } = setArrow$1(size2);
   $$unsubscribe_arrow = subscribe(arrow2, (value) => $arrow = value);
-  const attrs = getAttrs("arrow");
+  const attrs = getAttrs2("arrow");
   if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0) $$bindings.asChild(asChild);
   if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
   if ($$props.size === void 0 && $$bindings.size && size2 !== void 0) $$bindings.size(size2);
@@ -2053,10 +2108,10 @@ const Popover_content = create_ssr_component(($$result, $$props, $$bindings, slo
   let { strategy = "absolute" } = $$props;
   let { overlap = false } = $$props;
   let { el = void 0 } = $$props;
-  const { elements: { content }, states: { open }, ids, getAttrs } = getCtx$2();
+  const { elements: { content }, states: { open }, ids, getAttrs: getAttrs2 } = getCtx$2();
   $$unsubscribe_content = subscribe(content, (value) => $content = value);
   $$unsubscribe_open = subscribe(open, (value) => $open = value);
-  const attrs = getAttrs("content");
+  const attrs = getAttrs2("content");
   if ($$props.transition === void 0 && $$bindings.transition && transition !== void 0) $$bindings.transition(transition);
   if ($$props.transitionConfig === void 0 && $$bindings.transitionConfig && transitionConfig !== void 0) $$bindings.transitionConfig(transitionConfig);
   if ($$props.inTransition === void 0 && $$bindings.inTransition && inTransition !== void 0) $$bindings.inTransition(inTransition);
@@ -2116,11 +2171,11 @@ const Popover_trigger = create_ssr_component(($$result, $$props, $$bindings, slo
   let { asChild = false } = $$props;
   let { id = void 0 } = $$props;
   let { el = void 0 } = $$props;
-  const { elements: { trigger }, states: { open }, ids, getAttrs } = getCtx$2();
+  const { elements: { trigger }, states: { open }, ids, getAttrs: getAttrs2 } = getCtx$2();
   $$unsubscribe_trigger = subscribe(trigger, (value) => $trigger = value);
   $$unsubscribe_open = subscribe(open, (value) => $open = value);
   createDispatcher();
-  const bitsAttrs = getAttrs("trigger");
+  const bitsAttrs = getAttrs2("trigger");
   if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0) $$bindings.asChild(asChild);
   if ($$props.id === void 0 && $$bindings.id && id !== void 0) $$bindings.id(id);
   if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
@@ -2151,8 +2206,8 @@ function getSwitchData() {
 }
 function setCtx$1(props) {
   const { NAME, PARTS } = getSwitchData();
-  const getAttrs = createBitAttrs(NAME, PARTS);
-  const Switch2 = { ...createSwitch(removeUndefined(props)), getAttrs };
+  const getAttrs2 = createBitAttrs(NAME, PARTS);
+  const Switch2 = { ...createSwitch(removeUndefined(props)), getAttrs: getAttrs2 };
   setContext(NAME, Switch2);
   return {
     ...Switch2,
@@ -2226,7 +2281,7 @@ const Switch = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { asChild = false } = $$props;
   let { inputAttrs = void 0 } = $$props;
   let { el = void 0 } = $$props;
-  const { elements: { root }, states: { checked: localChecked }, updateOption, getAttrs } = setCtx$1({
+  const { elements: { root }, states: { checked: localChecked }, updateOption, getAttrs: getAttrs2 } = setCtx$1({
     disabled,
     name: name2,
     value,
@@ -2267,7 +2322,7 @@ const Switch = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   builder = $root;
   attrs = {
-    ...getAttrs("root"),
+    ...getAttrs2("root"),
     "data-checked": checked ? "" : void 0
   };
   {
@@ -2282,12 +2337,12 @@ const Switch_thumb = create_ssr_component(($$result, $$props, $$bindings, slots)
   let $checked, $$unsubscribe_checked;
   let { asChild = false } = $$props;
   let { el = void 0 } = $$props;
-  const { states: { checked }, getAttrs } = getCtx$1();
+  const { states: { checked }, getAttrs: getAttrs2 } = getCtx$1();
   $$unsubscribe_checked = subscribe(checked, (value) => $checked = value);
   if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0) $$bindings.asChild(asChild);
   if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
   attrs = {
-    ...getAttrs("thumb"),
+    ...getAttrs2("thumb"),
     "data-state": $checked ? "checked" : "unchecked",
     "data-checked": $checked ? "" : void 0
   };
@@ -2304,7 +2359,7 @@ function getTooltipData() {
 }
 function setCtx(props) {
   const { NAME, PARTS } = getTooltipData();
-  const getAttrs = createBitAttrs(NAME, PARTS);
+  const getAttrs2 = createBitAttrs(NAME, PARTS);
   const tooltip = {
     ...createTooltip({
       positioning: {
@@ -2315,7 +2370,7 @@ function setCtx(props) {
       ...removeUndefined(props),
       forceVisible: true
     }),
-    getAttrs
+    getAttrs: getAttrs2
   };
   setContext(NAME, tooltip);
   return {
@@ -2455,11 +2510,11 @@ const Tooltip_content = create_ssr_component(($$result, $$props, $$bindings, slo
   let { strategy = "absolute" } = $$props;
   let { overlap = false } = $$props;
   let { el = void 0 } = $$props;
-  const { elements: { content }, states: { open }, ids, getAttrs } = getCtx();
+  const { elements: { content }, states: { open }, ids, getAttrs: getAttrs2 } = getCtx();
   $$unsubscribe_content = subscribe(content, (value) => $content = value);
   $$unsubscribe_open = subscribe(open, (value) => $open = value);
   createDispatcher();
-  const attrs = getAttrs("content");
+  const attrs = getAttrs2("content");
   if ($$props.transition === void 0 && $$bindings.transition && transition !== void 0) $$bindings.transition(transition);
   if ($$props.transitionConfig === void 0 && $$bindings.transitionConfig && transitionConfig !== void 0) $$bindings.transitionConfig(transitionConfig);
   if ($$props.inTransition === void 0 && $$bindings.inTransition && inTransition !== void 0) $$bindings.inTransition(inTransition);
@@ -2517,10 +2572,10 @@ const Tooltip_trigger = create_ssr_component(($$result, $$props, $$bindings, slo
   let { asChild = false } = $$props;
   let { id = void 0 } = $$props;
   let { el = void 0 } = $$props;
-  const { elements: { trigger }, ids, getAttrs } = getCtx();
+  const { elements: { trigger }, ids, getAttrs: getAttrs2 } = getCtx();
   $$unsubscribe_trigger = subscribe(trigger, (value) => $trigger = value);
   createDispatcher();
-  const attrs = getAttrs("trigger");
+  const attrs = getAttrs2("trigger");
   if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0) $$bindings.asChild(asChild);
   if ($$props.id === void 0 && $$bindings.id && id !== void 0) $$bindings.id(id);
   if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
@@ -2543,9 +2598,9 @@ const Tooltip_arrow = create_ssr_component(($$result, $$props, $$bindings, slots
   let { size: size2 = 8 } = $$props;
   let { asChild = false } = $$props;
   let { el = void 0 } = $$props;
-  const { elements: { arrow: arrow2 }, getAttrs } = setArrow(size2);
+  const { elements: { arrow: arrow2 }, getAttrs: getAttrs2 } = setArrow(size2);
   $$unsubscribe_arrow = subscribe(arrow2, (value) => $arrow = value);
-  const attrs = getAttrs("arrow");
+  const attrs = getAttrs2("arrow");
   if ($$props.size === void 0 && $$bindings.size && size2 !== void 0) $$bindings.size(size2);
   if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0) $$bindings.asChild(asChild);
   if ($$props.el === void 0 && $$bindings.el && el !== void 0) $$bindings.el(el);
@@ -2556,22 +2611,55 @@ const Tooltip_arrow = create_ssr_component(($$result, $$props, $$bindings, slots
   $$unsubscribe_arrow();
   return `${asChild ? `${slots.default ? slots.default({ builder }) : ``}` : `<div${spread([escape_object(builder), escape_object($$restProps)], {})}${add_attribute("this", el, 0)}></div>`}`;
 });
+const isDevWindowOpen = writable(false);
+const isGameSettingsOpen = writable(false);
+const isLiveStatsOpen = writable(false);
+const TerminalWindow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["weight", "color", "size", "mirrored"]);
+  const { weight: ctxWeight, color: ctxColor, size: ctxSize, mirrored: ctxMirrored, ...restCtx } = getContext("iconCtx") || {};
+  let { weight = ctxWeight ?? "regular" } = $$props;
+  let { color = ctxColor ?? "currentColor" } = $$props;
+  let { size: size2 = ctxSize ?? "1em" } = $$props;
+  let { mirrored = ctxMirrored || false } = $$props;
+  if ($$props.weight === void 0 && $$bindings.weight && weight !== void 0) $$bindings.weight(weight);
+  if ($$props.color === void 0 && $$bindings.color && color !== void 0) $$bindings.color(color);
+  if ($$props.size === void 0 && $$bindings.size && size2 !== void 0) $$bindings.size(size2);
+  if ($$props.mirrored === void 0 && $$bindings.mirrored && mirrored !== void 0) $$bindings.mirrored(mirrored);
+  return `  <svg${spread(
+    [
+      { xmlns: "http://www.w3.org/2000/svg" },
+      { width: escape_attribute_value(size2) },
+      { height: escape_attribute_value(size2) },
+      { fill: escape_attribute_value(color) },
+      {
+        transform: escape_attribute_value(mirrored ? "scale(-1, 1)" : void 0)
+      },
+      { viewBox: "0 0 256 256" },
+      escape_object(restCtx),
+      escape_object($$restProps)
+    ],
+    {}
+  )}>${slots.default ? slots.default({}) : ``}<rect width="256" height="256" fill="none"></rect>${weight === "bold" ? `<path d="M72.5,150.63,100.79,128,72.5,105.37a12,12,0,1,1,15-18.74l40,32a12,12,0,0,1,0,18.74l-40,32a12,12,0,0,1-15-18.74ZM144,172h32a12,12,0,0,0,0-24H144a12,12,0,0,0,0,24ZM236,56V200a20,20,0,0,1-20,20H40a20,20,0,0,1-20-20V56A20,20,0,0,1,40,36H216A20,20,0,0,1,236,56Zm-24,4H44V196H212Z"></path>` : `${weight === "duotone" ? `<path d="M224,56V200a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V56a8,8,0,0,1,8-8H216A8,8,0,0,1,224,56Z" opacity="0.2"></path><path d="M128,128a8,8,0,0,1-3,6.25l-40,32a8,8,0,1,1-10-12.5L107.19,128,75,102.25a8,8,0,1,1,10-12.5l40,32A8,8,0,0,1,128,128Zm48,24H136a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm56-96V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Z"></path>` : `${weight === "fill" ? `<path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm-91,94.25-40,32a8,8,0,1,1-10-12.5L107.19,128,75,102.25a8,8,0,1,1,10-12.5l40,32a8,8,0,0,1,0,12.5ZM176,168H136a8,8,0,0,1,0-16h40a8,8,0,0,1,0,16Z"></path>` : `${weight === "light" ? `<path d="M126,128a6,6,0,0,1-2.25,4.69l-40,32a6,6,0,0,1-7.5-9.38L110.4,128,76.25,100.69a6,6,0,1,1,7.5-9.38l40,32A6,6,0,0,1,126,128Zm50,26H136a6,6,0,0,0,0,12h40a6,6,0,0,0,0-12Zm54-98V200a14,14,0,0,1-14,14H40a14,14,0,0,1-14-14V56A14,14,0,0,1,40,42H216A14,14,0,0,1,230,56Zm-12,0a2,2,0,0,0-2-2H40a2,2,0,0,0-2,2V200a2,2,0,0,0,2,2H216a2,2,0,0,0,2-2Z"></path>` : `${weight === "regular" ? `<path d="M128,128a8,8,0,0,1-3,6.25l-40,32a8,8,0,1,1-10-12.5L107.19,128,75,102.25a8,8,0,1,1,10-12.5l40,32A8,8,0,0,1,128,128Zm48,24H136a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm56-96V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Z"></path>` : `${weight === "thin" ? `<path d="M122.5,124.88a4,4,0,0,1,0,6.24l-40,32a4,4,0,0,1-5-6.24L113.6,128,77.5,99.12a4,4,0,0,1,5-6.24ZM176,156H136a4,4,0,0,0,0,8h40a4,4,0,0,0,0-8ZM228,56V200a12,12,0,0,1-12,12H40a12,12,0,0,1-12-12V56A12,12,0,0,1,40,44H216A12,12,0,0,1,228,56Zm-8,0a4,4,0,0,0-4-4H40a4,4,0,0,0-4,4V200a4,4,0,0,0,4,4H216a4,4,0,0,0,4-4Z"></path>` : `${escape((console.error('Unsupported icon weight. Choose from "thin", "light", "regular", "bold", "fill", or "duotone".'), ""))}`}`}`}`}`}`}</svg>`;
+});
 const Balance = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let balanceFormatted;
   let $balance, $$unsubscribe_balance;
+  let $isDevWindowOpen, $$unsubscribe_isDevWindowOpen;
   $$unsubscribe_balance = subscribe(balance, (value) => $balance = value);
-  const addMoneyAmounts = [100, 500, 1e3];
+  $$unsubscribe_isDevWindowOpen = subscribe(isDevWindowOpen, (value) => $isDevWindowOpen = value);
+  const addMoneyAmounts = [100, 500, 1e3, "Reset", "Set"];
   balanceFormatted = $balance.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
   $$unsubscribe_balance();
-  return `<div class="flex overflow-hidden rounded-md"><div class="flex gap-2 bg-slate-900 px-3 py-2 text-sm font-semibold tabular-nums text-white sm:text-base"><span class="select-none text-gray-500" data-svelte-h="svelte-1d17qqv">$</span> <span class="min-w-16 text-right">${escape(balanceFormatted)}</span></div> ${validate_component(Popover, "Popover.Root").$$render($$result, {}, {}, {
+  $$unsubscribe_isDevWindowOpen();
+  return ` <div class="flex items-center gap-1"> <div class="flex gap-2 bg-slate-900 px-3 py-2 text-sm font-semibold tabular-nums text-white sm:text-base rounded-md"><span class="select-none text-gray-500" data-svelte-h="svelte-1d17qqv">$</span> <span class="min-w-16 text-right">${escape(balanceFormatted)}</span></div>  ${validate_component(Popover, "Popover.Root").$$render($$result, {}, {}, {
     default: () => {
       return `${validate_component(Popover_trigger, "Popover.Trigger").$$render(
         $$result,
         {
-          class: "bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 active:bg-blue-700 sm:text-base"
+          class: "bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-500 active:bg-blue-700 sm:text-base rounded-md"
         },
         {},
         {
@@ -2596,10 +2684,37 @@ const Balance = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       )}`;
     }
+  })}  ${validate_component(Tooltip, "Tooltip.Root").$$render($$result, { openDelay: 0, closeOnPointerDown: false }, {}, {
+    default: () => {
+      return `${validate_component(Tooltip_trigger, "Tooltip.Trigger").$$render($$result, { asChild: true }, {}, {
+        default: ({ builder }) => {
+          return `<button${spread(
+            [
+              escape_object(builder),
+              {
+                class: escape_attribute_value(twMerge("p-2 text-slate-300 transition hover:bg-slate-600 active:bg-slate-500", $isDevWindowOpen && "text-slate-100", "rounded-md"))
+              }
+            ],
+            {}
+          )}>${validate_component(TerminalWindow, "TerminalWindow").$$render($$result, { class: "size-6", weight: "bold" }, {}, {})}</button>`;
+        }
+      })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render(
+        $$result,
+        {
+          transition: flyAndScale,
+          sideOffset: 4,
+          class: "z-30 max-w-lg rounded-md bg-white p-3 text-sm font-medium text-gray-950 drop-shadow-xl"
+        },
+        {},
+        {
+          default: () => {
+            return `${validate_component(Tooltip_arrow, "Tooltip.Arrow").$$render($$result, {}, {}, {})} <p>${escape($isDevWindowOpen ? "Close" : "Open")} Dev Window</p>`;
+          }
+        }
+      )}`;
+    }
   })}</div>`;
 });
-const isGameSettingsOpen = writable(false);
-const isLiveStatsOpen = writable(false);
 const ArrowClockwise = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["weight", "color", "size", "mirrored"]);
   const { weight: ctxWeight, color: ctxColor, size: ctxSize, mirrored: ctxMirrored, ...restCtx } = getContext("iconCtx") || {};
@@ -2980,6 +3095,80 @@ const SettingsWindow = create_ssr_component(($$result, $$props, $$bindings, slot
   $$unsubscribe_isGameSettingsOpen();
   return $$rendered;
 });
+const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $isDevWindowOpen, $$unsubscribe_isDevWindowOpen;
+  let $$unsubscribe_bounciness;
+  let $$unsubscribe_rowCount;
+  let $$unsubscribe_riskLevel;
+  let $$unsubscribe_autoBetIntervalMs;
+  $$unsubscribe_isDevWindowOpen = subscribe(isDevWindowOpen, (value) => $isDevWindowOpen = value);
+  $$unsubscribe_bounciness = subscribe(bounciness, (value) => value);
+  $$unsubscribe_rowCount = subscribe(rowCount, (value) => value);
+  $$unsubscribe_riskLevel = subscribe(riskLevel, (value) => value);
+  $$unsubscribe_autoBetIntervalMs = subscribe(autoBetIntervalMs, (value) => value);
+  $$unsubscribe_isDevWindowOpen();
+  $$unsubscribe_bounciness();
+  $$unsubscribe_rowCount();
+  $$unsubscribe_riskLevel();
+  $$unsubscribe_autoBetIntervalMs();
+  return `${$isDevWindowOpen ? `${validate_component(DraggableWindow, "DraggableWindow").$$render(
+    $$result,
+    {
+      onClose: () => $isDevWindowOpen = false,
+      class: "fixed bottom-8 right-8 w-[20rem]"
+    },
+    {},
+    {
+      title: () => {
+        return `${validate_component(TerminalWindow, "TerminalWindow").$$render(
+          $$result,
+          {
+            weight: "bold",
+            class: "text-xl text-slate-300"
+          },
+          {},
+          {}
+        )} <p class="text-sm font-medium text-white" data-svelte-h="svelte-1wqjbwf">Dev Console</p> `;
+      },
+      default: () => {
+        return ` <div class="flex flex-col gap-2 p-2">${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-dark text-background shadow-mini hover:bg-dark/95 inline-flex h-12 bg-white items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Bounciness`;
+            }
+          }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Alter bins`;
+            }
+          }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Autobet rate`;
+            }
+          }
+        )}</div>`;
+      }
+    }
+  )}` : ``}`;
+});
 const Infinity = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["weight", "color", "size", "mirrored"]);
   const { weight: ctxWeight, color: ctxColor, size: ctxSize, mirrored: ctxMirrored, ...restCtx } = getContext("iconCtx") || {};
@@ -3066,7 +3255,15 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const riskLevels = [
     { value: RiskLevel.LOW, label: "Low" },
     { value: RiskLevel.MEDIUM, label: "Medium" },
-    { value: RiskLevel.HIGH, label: "High" }
+    { value: RiskLevel.HIGH, label: "High" },
+    {
+      value: RiskLevel.EXTREME,
+      label: "EXTREME"
+    },
+    {
+      value: RiskLevel.DOPAMINE,
+      label: "DOPAMINE"
+    }
   ];
   const rowCounts = rowCountOptions.map((value) => ({ value, label: value.toString() }));
   let $$settled;
@@ -3243,11 +3440,11 @@ const GithubLogo = create_ssr_component(($$result, $$props, $$bindings, slots) =
 });
 const css = {
   code: "body{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))\n}",
-  map: '{"version":3,"file":"+page.svelte","sources":["+page.svelte"],"sourcesContent":["<script lang=\\"ts\\">import logo from \\"$lib/assets/logo.svg\\";\\nimport Balance from \\"$lib/components/Balance.svelte\\";\\nimport LiveStatsWindow from \\"$lib/components/LiveStatsWindow/LiveStatsWindow.svelte\\";\\nimport Plinko from \\"$lib/components/Plinko\\";\\nimport SettingsWindow from \\"$lib/components/SettingsWindow\\";\\nimport Sidebar from \\"$lib/components/Sidebar\\";\\nimport { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from \\"$lib/utils/game\\";\\nimport GitHubLogo from \\"phosphor-svelte/lib/GithubLogo\\";\\nimport { onMount } from \\"svelte\\";\\nonMount(() => {\\n  setBalanceFromLocalStorage();\\n});\\n<\/script>\\n\\n<svelte:window on:beforeunload={writeBalanceToLocalStorage} />\\n\\n<div class=\\"relative flex min-h-dvh w-full flex-col\\">\\n  <nav class=\\"sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg\\">\\n    <div class=\\"mx-auto flex h-14 max-w-7xl items-center justify-between\\">\\n      <img src={logo} alt=\\"logo\\" class=\\"h-6 sm:h-7\\" />\\n      <div class=\\"mx-auto\\">\\n        <Balance />\\n      </div>\\n    </div>\\n  </nav>\\n\\n  <div class=\\"flex-1 px-5\\">\\n    <div class=\\"mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl\\">\\n      <div class=\\"flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row\\">\\n        <Sidebar />\\n        <div class=\\"flex-1\\">\\n          <Plinko />\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <SettingsWindow />\\n  <LiveStatsWindow />\\n\\n  <footer class=\\"px-5 pb-4 pt-16\\">\\n    <div class=\\"mx-auto max-w-[40rem]\\">\\n      <div aria-hidden=\\"true\\" class=\\"h-[1px] bg-slate-700\\" />\\n      <div class=\\"flex items-center justify-between p-2\\">\\n        <p class=\\"text-sm text-slate-500\\">\\n          <a\\n            href=\\"/\\"\\n            target=\\"_blank\\"\\n            rel=\\"noreferrer\\"\\n            class=\\" text-cyan-600 transition hover:text-cyan-500\\"\\n          >\\n            Plinko Game Online\\n          </a>\\n          © 2024\\n        </p>\\n        <a\\n          href=\\"https://github.com/plinko-game-online/plinko-game-online.github.io\\"\\n          target=\\"_blank\\"\\n          rel=\\"noreferrer\\"\\n          class=\\"flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500\\"\\n        >\\n          <GitHubLogo class=\\"size-4\\" weight=\\"bold\\" />\\n          <span>Source Code</span>\\n        </a>\\n      </div>\\n    </div>\\n  </footer>\\n</div>\\n\\n<style>\\n  :global(body) {\\n    --tw-bg-opacity: 1;\\n    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))\\n}\\n</style>\\n"],"names":[],"mappings":"AAsEU,IAAM,CACZ,eAAe,CAAE,CAAC,CAClB,gBAAgB,CAAE,IAAI,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,eAAe,CAAC,EAAE,CAAC;AAC5D"}'
+  map: '{"version":3,"file":"+page.svelte","sources":["+page.svelte"],"sourcesContent":["<script lang=\\"ts\\">import logo from \\"$lib/assets/logo.svg\\";\\nimport Balance from \\"$lib/components/Balance.svelte\\";\\nimport LiveStatsWindow from \\"$lib/components/LiveStatsWindow/LiveStatsWindow.svelte\\";\\nimport Plinko from \\"$lib/components/Plinko\\";\\nimport SettingsWindow from \\"$lib/components/SettingsWindow\\";\\nimport DevWindow from \\"$lib/components/DevWindow\\";\\nimport Sidebar from \\"$lib/components/Sidebar\\";\\nimport { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from \\"$lib/utils/game\\";\\nimport GitHubLogo from \\"phosphor-svelte/lib/GithubLogo\\";\\nimport { onMount } from \\"svelte\\";\\nonMount(() => {\\n  setBalanceFromLocalStorage();\\n});\\n<\/script>\\n\\n<svelte:window on:beforeunload={writeBalanceToLocalStorage} />\\n\\n<div class=\\"relative flex min-h-dvh w-full flex-col\\">\\n  <nav class=\\"sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg\\">\\n    <div class=\\"mx-auto flex h-14 max-w-7xl items-center justify-between\\">\\n      <img src={logo} alt=\\"logo\\" class=\\"h-6 sm:h-7\\" />\\n      <div class=\\"mx-auto\\">\\n        <Balance />\\n      </div>\\n    </div>\\n  </nav>\\n\\n  <div class=\\"flex-1 px-5\\">\\n    <div class=\\"mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl\\">\\n      <div class=\\"flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row\\">\\n        <Sidebar />\\n        <div class=\\"flex-1\\">\\n          <Plinko />\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <SettingsWindow />\\n  <LiveStatsWindow />\\n  <DevWindow />\\n  <footer class=\\"px-5 pb-4 pt-16\\">\\n    <div class=\\"mx-auto max-w-[40rem]\\">\\n      <div aria-hidden=\\"true\\" class=\\"h-[1px] bg-slate-700\\" />\\n      <div class=\\"flex items-center justify-between p-2\\">\\n        <p class=\\"text-sm text-slate-500\\">\\n          <a\\n            href=\\"/\\"\\n            target=\\"_blank\\"\\n            rel=\\"noreferrer\\"\\n            class=\\" text-cyan-600 transition hover:text-cyan-500\\"\\n          >\\n            Plinko Game Online\\n          </a>\\n          © 2024\\n        </p>\\n        <a\\n          href=\\"https://github.com/plinko-game-online/plinko-game-online.github.io\\"\\n          target=\\"_blank\\"\\n          rel=\\"noreferrer\\"\\n          class=\\"flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500\\"\\n        >\\n          <GitHubLogo class=\\"size-4\\" weight=\\"bold\\" />\\n          <span>Source Code</span>\\n        </a>\\n      </div>\\n    </div>\\n  </footer>\\n</div>\\n\\n<style>\\n  :global(body) {\\n    --tw-bg-opacity: 1;\\n    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))\\n}\\n</style>\\n"],"names":[],"mappings":"AAuEU,IAAM,CACZ,eAAe,CAAE,CAAC,CAClB,gBAAgB,CAAE,IAAI,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,eAAe,CAAC,EAAE,CAAC;AAC5D"}'
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css);
-  return ` <div class="relative flex min-h-dvh w-full flex-col"><nav class="sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg"><div class="mx-auto flex h-14 max-w-7xl items-center justify-between"><img${add_attribute("src", logo, 0)} alt="logo" class="h-6 sm:h-7"> <div class="mx-auto">${validate_component(Balance, "Balance").$$render($$result, {}, {}, {})}</div></div></nav> <div class="flex-1 px-5"><div class="mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl"><div class="flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row">${validate_component(Sidebar, "Sidebar").$$render($$result, {}, {}, {})} <div class="flex-1">${validate_component(Plinko, "Plinko").$$render($$result, {}, {}, {})}</div></div></div></div> ${validate_component(SettingsWindow, "SettingsWindow").$$render($$result, {}, {}, {})} ${validate_component(LiveStatsWindow, "LiveStatsWindow").$$render($$result, {}, {}, {})} <footer class="px-5 pb-4 pt-16"><div class="mx-auto max-w-[40rem]"><div aria-hidden="true" class="h-[1px] bg-slate-700"></div> <div class="flex items-center justify-between p-2"><p class="text-sm text-slate-500" data-svelte-h="svelte-10v85bh"><a href="/" target="_blank" rel="noreferrer" class="text-cyan-600 transition hover:text-cyan-500">Plinko Game Online</a>
+  return ` <div class="relative flex min-h-dvh w-full flex-col"><nav class="sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg"><div class="mx-auto flex h-14 max-w-7xl items-center justify-between"><img${add_attribute("src", logo, 0)} alt="logo" class="h-6 sm:h-7"> <div class="mx-auto">${validate_component(Balance, "Balance").$$render($$result, {}, {}, {})}</div></div></nav> <div class="flex-1 px-5"><div class="mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl"><div class="flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row">${validate_component(Sidebar, "Sidebar").$$render($$result, {}, {}, {})} <div class="flex-1">${validate_component(Plinko, "Plinko").$$render($$result, {}, {}, {})}</div></div></div></div> ${validate_component(SettingsWindow, "SettingsWindow").$$render($$result, {}, {}, {})} ${validate_component(LiveStatsWindow, "LiveStatsWindow").$$render($$result, {}, {}, {})} ${validate_component(DevWindow, "DevWindow").$$render($$result, {}, {}, {})} <footer class="px-5 pb-4 pt-16"><div class="mx-auto max-w-[40rem]"><div aria-hidden="true" class="h-[1px] bg-slate-700"></div> <div class="flex items-center justify-between p-2"><p class="text-sm text-slate-500" data-svelte-h="svelte-10v85bh"><a href="/" target="_blank" rel="noreferrer" class="text-cyan-600 transition hover:text-cyan-500">Plinko Game Online</a>
           © 2024</p> <a href="https://github.com/plinko-game-online/plinko-game-online.github.io" target="_blank" rel="noreferrer" class="flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500">${validate_component(GithubLogo, "GitHubLogo").$$render($$result, { class: "size-4", weight: "bold" }, {}, {})} <span data-svelte-h="svelte-sri54o">Source Code</span></a></div></div></footer> </div>`;
 });
 export {

@@ -1,6 +1,6 @@
-import { h as get_store_value, c as create_ssr_component, j as compute_rest_props, g as getContext, k as spread, n as escape_attribute_value, l as escape_object, e as escape, b as subscribe, q as add_styles, p as each, v as validate_component, a as add_attribute } from "./ssr.js";
-import Matter from "matter-js";
+import { h as get_store_value, c as create_ssr_component, j as compute_rest_props, g as getContext, k as spread, l as escape_attribute_value, n as escape_object, e as escape, b as subscribe, q as add_styles, p as each, v as validate_component, a as add_attribute } from "./ssr.js";
 import { w as writable, d as derived } from "./index.js";
+import Matter from "matter-js";
 import { v4 } from "uuid";
 var BetMode = /* @__PURE__ */ ((BetMode2) => {
   BetMode2["MANUAL"] = "MANUAL";
@@ -11,6 +11,8 @@ var RiskLevel = /* @__PURE__ */ ((RiskLevel2) => {
   RiskLevel2["LOW"] = "LOW";
   RiskLevel2["MEDIUM"] = "MEDIUM";
   RiskLevel2["HIGH"] = "HIGH";
+  RiskLevel2["EXTREME"] = "EXTREME";
+  RiskLevel2["DOPAMINE"] = "DOPAMINE";
   return RiskLevel2;
 })(RiskLevel || {});
 function interpolateRgbColors(from, to, length) {
@@ -96,6 +98,7 @@ const LOCAL_STORAGE_KEY = {
   }
 };
 const rowCountOptions = [8, 9, 10, 11, 12, 13, 14, 15, 16];
+const autoBetIntervalMs = writable(250);
 const binColorsByRowCount = rowCountOptions.reduce(
   (acc, rowCount2) => {
     acc[rowCount2] = getBinColors(rowCount2);
@@ -114,7 +117,9 @@ const binPayouts = {
   8: {
     [RiskLevel.LOW]: [5.6, 2.1, 1.1, 1, 0.5, 1, 1.1, 2.1, 5.6],
     [RiskLevel.MEDIUM]: [13, 3, 1.3, 0.7, 0.4, 0.7, 1.3, 3, 13],
-    [RiskLevel.HIGH]: [29, 4, 1.5, 0.3, 0.2, 0.3, 1.5, 4, 29]
+    [RiskLevel.HIGH]: [29, 4, 1.5, 0.3, 0.2, 0.3, 1.5, 4, 29],
+    [RiskLevel.EXTREME]: [65, 1.3, -3, -4, -10, -4, -3, 1.3, 65],
+    [RiskLevel.DOPAMINE]: [10, 15, 20, 25, 30, 25, 20, 15, 10]
   },
   9: {
     [RiskLevel.LOW]: [5.6, 2, 1.6, 1, 0.7, 0.7, 1, 1.6, 2, 5.6],
@@ -157,6 +162,7 @@ const binPayouts = {
     [RiskLevel.HIGH]: [1e3, 130, 26, 9, 4, 2, 0.2, 0.2, 0.2, 0.2, 0.2, 2, 4, 9, 26, 130, 1e3]
   }
 };
+const runtimePayouts = writable(structuredClone(binPayouts));
 const binColor = {
   background: {
     red: { r: 255, g: 0, b: 63 },
@@ -325,7 +331,7 @@ class PlinkoEngine {
       0,
       ballRadius,
       {
-        restitution: 0.8,
+        restitution: get_store_value(bounciness),
         // Bounciness
         friction,
         frictionAir: frictionAirByRowCount[this.rowCount],
@@ -380,7 +386,7 @@ class PlinkoEngine {
     const binIndex = this.pinsLastRowXCoords.findLastIndex((pinX) => pinX < ball.position.x);
     if (binIndex !== -1 && binIndex < this.pinsLastRowXCoords.length - 1) {
       const betAmount2 = get_store_value(betAmountOfExistingBalls)[ball.id] ?? 0;
-      const multiplier = binPayouts[this.rowCount][this.riskLevel][binIndex];
+      const multiplier = get_store_value(runtimePayouts)[this.rowCount][this.riskLevel][binIndex];
       const payoutValue = betAmount2 * multiplier;
       const profit = payoutValue - betAmount2;
       winRecords.update((records) => [
@@ -492,7 +498,8 @@ class PlinkoEngine {
 const plinkoEngine = writable(null);
 const betAmount = writable(1);
 const betAmountOfExistingBalls = writable({});
-const rowCount = writable(16);
+const rowCount = writable(8);
+const bounciness = writable(0.8);
 const riskLevel = writable(RiskLevel.MEDIUM);
 const winRecords = writable([]);
 const totalProfitHistory = writable([0]);
@@ -631,11 +638,13 @@ const BinsRow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $isAnimationOn, $$unsubscribe_isAnimationOn;
   let $winRecords, $$unsubscribe_winRecords;
   let $plinkoEngine, $$unsubscribe_plinkoEngine;
+  let $runtimePayouts, $$unsubscribe_runtimePayouts;
   let $rowCount, $$unsubscribe_rowCount;
   let $riskLevel, $$unsubscribe_riskLevel;
   $$unsubscribe_isAnimationOn = subscribe(isAnimationOn, (value) => $isAnimationOn = value);
   $$unsubscribe_winRecords = subscribe(winRecords, (value) => $winRecords = value);
   $$unsubscribe_plinkoEngine = subscribe(plinkoEngine, (value) => $plinkoEngine = value);
+  $$unsubscribe_runtimePayouts = subscribe(runtimePayouts, (value) => $runtimePayouts = value);
   $$unsubscribe_rowCount = subscribe(rowCount, (value) => $rowCount = value);
   $$unsubscribe_riskLevel = subscribe(riskLevel, (value) => $riskLevel = value);
   let binAnimations = [];
@@ -658,11 +667,12 @@ const BinsRow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_isAnimationOn();
   $$unsubscribe_winRecords();
   $$unsubscribe_plinkoEngine();
+  $$unsubscribe_runtimePayouts();
   $$unsubscribe_rowCount();
   $$unsubscribe_riskLevel();
   return ` <div class="flex h-[clamp(10px,0.352px+2.609vw,16px)] w-full justify-center lg:h-7">${$plinkoEngine ? `<div class="flex gap-[1%]"${add_styles({
     "width": `${($plinkoEngine.binsWidthPercentage ?? 0) * 100}%`
-  })}>${each(binPayouts[$rowCount][$riskLevel], (payout, binIndex) => {
+  })}>${each($runtimePayouts[$rowCount][$riskLevel], (payout, binIndex) => {
     return ` <div class="flex min-w-0 flex-1 items-center justify-center rounded-sm text-[clamp(6px,2.784px+0.87vw,8px)] font-bold text-gray-950 shadow-[0_2px_var(--shadow-color)] lg:rounded-md lg:text-[clamp(10px,-16.944px+2.632vw,12px)] lg:shadow-[0_3px_var(--shadow-color)]"${add_styles({
       "background-color": binColorsByRowCount[$rowCount].background[binIndex],
       "--shadow-color": binColorsByRowCount[$rowCount].shadow[binIndex]
@@ -702,20 +712,22 @@ export {
   BetMode as B,
   Plinko as P,
   RiskLevel as R,
-  betAmount as a,
+  bounciness as a,
   balance as b,
   convertScale as c,
-  betAmountOfExistingBalls as d,
-  rowCount as e,
+  riskLevel as d,
+  autoBetIntervalMs as e,
   formatCurrency as f,
-  rowCountOptions as g,
-  binProbabilities as h,
+  betAmount as g,
+  betAmountOfExistingBalls as h,
   isAnimationOn as i,
-  binProbabilitiesByRowCount as j,
-  dotProduct as k,
-  binPayouts as l,
+  rowCountOptions as j,
+  binProbabilities as k,
+  binProbabilitiesByRowCount as l,
+  dotProduct as m,
+  binPayouts as n,
   plinkoEngine as p,
-  riskLevel as r,
+  rowCount as r,
   totalProfitHistory as t,
   winRecords as w
 };
