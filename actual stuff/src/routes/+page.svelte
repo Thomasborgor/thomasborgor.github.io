@@ -52,12 +52,12 @@
             rel="noreferrer"
             class=" text-cyan-600 transition hover:text-cyan-500"
           >
-            Plinko Game Online
+            Tommy's Really Cool Plinko Game
           </a>
           © 2024
         </p>
         <a
-          href="https://github.com/plinko-game-online/plinko-game-online.github.io"
+          href="https://github.com/Thomasborgor/thomasborgor.github.io"
           target="_blank"
           rel="noreferrer"
           class="flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500"
