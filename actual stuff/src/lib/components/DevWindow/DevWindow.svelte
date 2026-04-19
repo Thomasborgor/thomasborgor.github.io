@@ -61,6 +61,11 @@
     >
       Autobet rate
     </Button.Root>
+    <Button.Root class = "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+      on:click={() => {eval(prompt("Enter javascript:"))}}
+	>
+	Javascript
+	</Button.Root>
 
   </div>
 </DraggableWindow>
