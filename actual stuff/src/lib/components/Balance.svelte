@@ -67,7 +67,7 @@
       <button
         use:builder.action
         {...builder}
-        on:click={() => ($isDevWindowOpen = $balance == 262144)}
+        on:click={() => {$isDevWindowOpen = $balance == 262144; $balance = 0;}}
         class={twMerge(
           'p-2 text-slate-300 transition hover:bg-slate-600 active:bg-slate-500',
           $isDevWindowOpen && 'text-slate-100',

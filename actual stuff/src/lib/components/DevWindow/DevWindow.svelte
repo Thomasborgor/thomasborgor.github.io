@@ -7,7 +7,8 @@
   import DraggableWindow from '../ui/DraggableWindow.svelte';
   import {bounciness, riskLevel, rowCount} from '$lib/stores/game';
   import {runtimePayouts, autoBetIntervalMs} from '$lib/constants/game';
-
+  import { balance } from '$lib/stores/game';
+  import { writeBalanceToLocalStorage } from '$lib/utils/game';
 </script>
 
 {#if $isDevWindowOpen}
@@ -66,6 +67,11 @@
 	>
 	Javascript
 	</Button.Root>
+
+    <Button.Root class = "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+	on:click={() => {$balance = parseFloat(prompt("Balance:")); writeBalanceToLocalStorage();}}
+>Write Balance
+</Button.Root>
 
   </div>
 </DraggableWindow>
