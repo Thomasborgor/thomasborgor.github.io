@@ -101,7 +101,7 @@ class PlinkoEngine {
       16: 0.0364,
     },
   };
-
+  private currentbin = 0;
   /**
    * Creates the engine and the game's layout.
    *
@@ -187,12 +187,10 @@ class PlinkoEngine {
     const ballOffsetRangeX = this.pinDistanceX * 0.8;
     const ballRadius = this.pinRadius * 2;
     const { friction, frictionAirByRowCount } = PlinkoEngine.ballFrictions;
-
+    const x = getRandomBetween(this.canvas.width/2-ballOffsetRangeX, this.canvas.width/2+ballOffsetRangeX);
+    console.log(this.canvas.width/2-ballOffsetRangeX,x);
     const ball = Matter.Bodies.circle(
-      getRandomBetween(
-        this.canvas.width / 2 - ballOffsetRangeX,
-        this.canvas.width / 2 + ballOffsetRangeX,
-      ),
+      x,
       0,
       ballRadius,
       {

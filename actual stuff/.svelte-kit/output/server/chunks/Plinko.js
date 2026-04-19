@@ -245,6 +245,7 @@ class PlinkoEngine {
       16: 0.0364
     }
   };
+  currentbin = 0;
   /**
    * Creates the engine and the game's layout.
    *
@@ -323,11 +324,10 @@ class PlinkoEngine {
     const ballOffsetRangeX = this.pinDistanceX * 0.8;
     const ballRadius = this.pinRadius * 2;
     const { friction, frictionAirByRowCount } = PlinkoEngine.ballFrictions;
+    const x = getRandomBetween(this.canvas.width / 2 - ballOffsetRangeX, this.canvas.width / 2 + ballOffsetRangeX);
+    console.log(this.canvas.width / 2 - ballOffsetRangeX, x);
     const ball = Matter.Bodies.circle(
-      getRandomBetween(
-        this.canvas.width / 2 - ballOffsetRangeX,
-        this.canvas.width / 2 + ballOffsetRangeX
-      ),
+      x,
       0,
       ballRadius,
       {
@@ -500,6 +500,7 @@ const betAmount = writable(1);
 const betAmountOfExistingBalls = writable({});
 const rowCount = writable(8);
 const bounciness = writable(0.8);
+const ignoreBetRules = writable(false);
 const riskLevel = writable(RiskLevel.MEDIUM);
 const winRecords = writable([]);
 const totalProfitHistory = writable([0]);
@@ -718,14 +719,15 @@ export {
   riskLevel as d,
   autoBetIntervalMs as e,
   formatCurrency as f,
-  betAmount as g,
-  betAmountOfExistingBalls as h,
+  ignoreBetRules as g,
+  betAmount as h,
   isAnimationOn as i,
-  rowCountOptions as j,
-  binProbabilities as k,
-  binProbabilitiesByRowCount as l,
-  dotProduct as m,
-  binPayouts as n,
+  betAmountOfExistingBalls as j,
+  rowCountOptions as k,
+  binProbabilities as l,
+  binProbabilitiesByRowCount as m,
+  dotProduct as n,
+  binPayouts as o,
   plinkoEngine as p,
   rowCount as r,
   totalProfitHistory as t,

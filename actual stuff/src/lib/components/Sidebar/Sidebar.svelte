@@ -8,6 +8,7 @@
     plinkoEngine,
     riskLevel,
     rowCount,
+    ignoreBetRules,
   } from '$lib/stores/game';
   import { isGameSettingsOpen, isLiveStatsOpen } from '$lib/stores/layout';
   import { BetMode, RiskLevel } from '$lib/types';
@@ -38,8 +39,8 @@
 
   let autoBetInterval: ReturnType<typeof setInterval> | null = null;
 
-  $: isBetAmountNegative = $betAmount < 0;
-  $: isBetExceedBalance = $betAmount > $balance;
+  $: isBetAmountNegative = $ignoreBetRules ? false : $betAmount < 0;
+  $: isBetExceedBalance = $ignoreBetRules ? false : $betAmount > $balance;
   $: isAutoBetInputNegative = autoBetInput < 0;
 
   $: isDropBallDisabled =

@@ -1,5 +1,5 @@
 import { d as set_current_component, f as current_component, r as run_all, o as onDestroy, h as get_store_value, i as createEventDispatcher, c as create_ssr_component, j as compute_rest_props, k as spread, l as escape_attribute_value, n as escape_object, a as add_attribute, s as setContext, g as getContext, b as subscribe, v as validate_component, e as escape, p as each } from "../../chunks/ssr.js";
-import { c as convertScale, b as balance, w as winRecords, f as formatCurrency, t as totalProfitHistory, i as isAnimationOn, a as bounciness, r as rowCount, d as riskLevel, e as autoBetIntervalMs, p as plinkoEngine, g as betAmount, h as betAmountOfExistingBalls, B as BetMode, R as RiskLevel, j as rowCountOptions, P as Plinko } from "../../chunks/Plinko.js";
+import { c as convertScale, b as balance, w as winRecords, f as formatCurrency, t as totalProfitHistory, i as isAnimationOn, a as bounciness, r as rowCount, d as riskLevel, e as autoBetIntervalMs, g as ignoreBetRules, p as plinkoEngine, h as betAmount, j as betAmountOfExistingBalls, B as BetMode, R as RiskLevel, k as rowCountOptions, P as Plinko } from "../../chunks/Plinko.js";
 import "dequal";
 import { d as derived, w as writable, r as readable, a as readonly } from "../../chunks/index.js";
 import { o as onMount } from "../../chunks/ssr2.js";
@@ -3102,18 +3102,21 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let $$unsubscribe_riskLevel;
   let $$unsubscribe_autoBetIntervalMs;
   let $$unsubscribe_balance;
+  let $ignoreBetRules, $$unsubscribe_ignoreBetRules;
   $$unsubscribe_isDevWindowOpen = subscribe(isDevWindowOpen, (value) => $isDevWindowOpen = value);
   $$unsubscribe_bounciness = subscribe(bounciness, (value) => value);
   $$unsubscribe_rowCount = subscribe(rowCount, (value) => value);
   $$unsubscribe_riskLevel = subscribe(riskLevel, (value) => value);
   $$unsubscribe_autoBetIntervalMs = subscribe(autoBetIntervalMs, (value) => value);
   $$unsubscribe_balance = subscribe(balance, (value) => value);
+  $$unsubscribe_ignoreBetRules = subscribe(ignoreBetRules, (value) => $ignoreBetRules = value);
   $$unsubscribe_isDevWindowOpen();
   $$unsubscribe_bounciness();
   $$unsubscribe_rowCount();
   $$unsubscribe_riskLevel();
   $$unsubscribe_autoBetIntervalMs();
   $$unsubscribe_balance();
+  $$unsubscribe_ignoreBetRules();
   return `${$isDevWindowOpen ? `${validate_component(DraggableWindow, "DraggableWindow").$$render(
     $$result,
     {
@@ -3189,6 +3192,17 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
               return `Write Balance`;
             }
           }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Turn ignoreBetRules ${escape($ignoreBetRules ? "off" : "on")}`;
+            }
+          }
         )}</div>`;
       }
     }
@@ -3258,6 +3272,7 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $betAmount, $$unsubscribe_betAmount;
   let $betAmountOfExistingBalls, $$unsubscribe_betAmountOfExistingBalls;
   let $balance, $$unsubscribe_balance;
+  let $ignoreBetRules, $$unsubscribe_ignoreBetRules;
   let $riskLevel, $$unsubscribe_riskLevel;
   let $rowCount, $$unsubscribe_rowCount;
   let $isGameSettingsOpen, $$unsubscribe_isGameSettingsOpen;
@@ -3266,6 +3281,7 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_betAmount = subscribe(betAmount, (value) => $betAmount = value);
   $$unsubscribe_betAmountOfExistingBalls = subscribe(betAmountOfExistingBalls, (value) => $betAmountOfExistingBalls = value);
   $$unsubscribe_balance = subscribe(balance, (value) => $balance = value);
+  $$unsubscribe_ignoreBetRules = subscribe(ignoreBetRules, (value) => $ignoreBetRules = value);
   $$unsubscribe_riskLevel = subscribe(riskLevel, (value) => $riskLevel = value);
   $$unsubscribe_rowCount = subscribe(rowCount, (value) => $rowCount = value);
   $$unsubscribe_isGameSettingsOpen = subscribe(isGameSettingsOpen, (value) => $isGameSettingsOpen = value);
@@ -3297,8 +3313,8 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   do {
     $$settled = true;
     $$result.head = previous_head;
-    isBetAmountNegative = $betAmount < 0;
-    isBetExceedBalance = $betAmount > $balance;
+    isBetAmountNegative = $ignoreBetRules ? false : $betAmount < 0;
+    isBetExceedBalance = $ignoreBetRules ? false : $betAmount > $balance;
     isAutoBetInputNegative = autoBetInput < 0;
     isDropBallDisabled = $plinkoEngine === null || isBetAmountNegative || isBetExceedBalance || isAutoBetInputNegative;
     hasOutstandingBalls = Object.keys($betAmountOfExistingBalls).length > 0;
@@ -3430,6 +3446,7 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_betAmount();
   $$unsubscribe_betAmountOfExistingBalls();
   $$unsubscribe_balance();
+  $$unsubscribe_ignoreBetRules();
   $$unsubscribe_riskLevel();
   $$unsubscribe_rowCount();
   $$unsubscribe_isGameSettingsOpen();

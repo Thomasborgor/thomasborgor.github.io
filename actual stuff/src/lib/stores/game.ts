@@ -18,7 +18,7 @@ export const betAmountOfExistingBalls = writable<BetAmountOfExistingBalls>({});
 
 export const rowCount = writable<RowCount>(8);
 export const bounciness = writable<number>(0.8);
-
+export const ignoreBetRules = writable<boolean>(false);
 export const riskLevel = writable<RiskLevel>(RiskLevel.MEDIUM);
 
 export const winRecords = writable<WinRecord[]>([]);
