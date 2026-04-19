@@ -72,8 +72,8 @@ declare module '$env/static/private' {
 	export const MOTD_SHOWN: string;
 	export const GTK2_RC_FILES: string;
 	export const HOME: string;
-	export const LC_PAPER: string;
 	export const LANG: string;
+	export const LC_PAPER: string;
 	export const _JAVA_AWT_WM_NONREPARENTING: string;
 	export const XDG_CURRENT_DESKTOP: string;
 	export const npm_package_version: string;
@@ -90,8 +90,8 @@ declare module '$env/static/private' {
 	export const XKB_DEFAULT_LAYOUT: string;
 	export const npm_config_npm_version: string;
 	export const XDG_SESSION_CLASS: string;
-	export const LC_IDENTIFICATION: string;
 	export const TERM: string;
+	export const LC_IDENTIFICATION: string;
 	export const npm_package_name: string;
 	export const npm_config_prefix: string;
 	export const USER: string;
@@ -252,8 +252,8 @@ declare module '$env/dynamic/private' {
 		MOTD_SHOWN: string;
 		GTK2_RC_FILES: string;
 		HOME: string;
-		LC_PAPER: string;
 		LANG: string;
+		LC_PAPER: string;
 		_JAVA_AWT_WM_NONREPARENTING: string;
 		XDG_CURRENT_DESKTOP: string;
 		npm_package_version: string;
@@ -270,8 +270,8 @@ declare module '$env/dynamic/private' {
 		XKB_DEFAULT_LAYOUT: string;
 		npm_config_npm_version: string;
 		XDG_SESSION_CLASS: string;
-		LC_IDENTIFICATION: string;
 		TERM: string;
+		LC_IDENTIFICATION: string;
 		npm_package_name: string;
 		npm_config_prefix: string;
 		USER: string;

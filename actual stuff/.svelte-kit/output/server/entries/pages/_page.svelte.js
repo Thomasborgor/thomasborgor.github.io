@@ -3101,16 +3101,19 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let $$unsubscribe_rowCount;
   let $$unsubscribe_riskLevel;
   let $$unsubscribe_autoBetIntervalMs;
+  let $$unsubscribe_balance;
   $$unsubscribe_isDevWindowOpen = subscribe(isDevWindowOpen, (value) => $isDevWindowOpen = value);
   $$unsubscribe_bounciness = subscribe(bounciness, (value) => value);
   $$unsubscribe_rowCount = subscribe(rowCount, (value) => value);
   $$unsubscribe_riskLevel = subscribe(riskLevel, (value) => value);
   $$unsubscribe_autoBetIntervalMs = subscribe(autoBetIntervalMs, (value) => value);
+  $$unsubscribe_balance = subscribe(balance, (value) => value);
   $$unsubscribe_isDevWindowOpen();
   $$unsubscribe_bounciness();
   $$unsubscribe_rowCount();
   $$unsubscribe_riskLevel();
   $$unsubscribe_autoBetIntervalMs();
+  $$unsubscribe_balance();
   return `${$isDevWindowOpen ? `${validate_component(DraggableWindow, "DraggableWindow").$$render(
     $$result,
     {
@@ -3162,6 +3165,28 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
           {
             default: () => {
               return `Autobet rate`;
+            }
+          }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Javascript`;
+            }
+          }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Write Balance`;
             }
           }
         )}</div>`;
@@ -3440,7 +3465,7 @@ const GithubLogo = create_ssr_component(($$result, $$props, $$bindings, slots) =
 });
 const css = {
   code: "body{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))\n}",
-  map: `{"version":3,"file":"+page.svelte","sources":["+page.svelte"],"sourcesContent":["<script lang=\\"ts\\">import logo from \\"$lib/assets/logo.svg\\";\\nimport Balance from \\"$lib/components/Balance.svelte\\";\\nimport LiveStatsWindow from \\"$lib/components/LiveStatsWindow/LiveStatsWindow.svelte\\";\\nimport Plinko from \\"$lib/components/Plinko\\";\\nimport SettingsWindow from \\"$lib/components/SettingsWindow\\";\\nimport DevWindow from \\"$lib/components/DevWindow\\";\\nimport Sidebar from \\"$lib/components/Sidebar\\";\\nimport { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from \\"$lib/utils/game\\";\\nimport GitHubLogo from \\"phosphor-svelte/lib/GithubLogo\\";\\nimport { onMount } from \\"svelte\\";\\nonMount(() => {\\n  setBalanceFromLocalStorage();\\n});\\n<\/script>\\n\\n<svelte:window on:beforeunload={writeBalanceToLocalStorage} />\\n\\n<div class=\\"relative flex min-h-dvh w-full flex-col\\">\\n  <nav class=\\"sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg\\">\\n    <div class=\\"mx-auto flex h-14 max-w-7xl items-center justify-between\\">\\n      <img src={logo} alt=\\"logo\\" class=\\"h-6 sm:h-7\\" />\\n      <div class=\\"mx-auto\\">\\n        <Balance />\\n      </div>\\n    </div>\\n  </nav>\\n\\n  <div class=\\"flex-1 px-5\\">\\n    <div class=\\"mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl\\">\\n      <div class=\\"flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row\\">\\n        <Sidebar />\\n        <div class=\\"flex-1\\">\\n          <Plinko />\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <SettingsWindow />\\n  <LiveStatsWindow />\\n  <DevWindow />\\n  <footer class=\\"px-5 pb-4 pt-16\\">\\n    <div class=\\"mx-auto max-w-[40rem]\\">\\n      <div aria-hidden=\\"true\\" class=\\"h-[1px] bg-slate-700\\" />\\n      <div class=\\"flex items-center justify-between p-2\\">\\n        <p class=\\"text-sm text-slate-500\\">\\n          <a\\n            href=\\"/\\"\\n            target=\\"_blank\\"\\n            rel=\\"noreferrer\\"\\n            class=\\" text-cyan-600 transition hover:text-cyan-500\\"\\n          >\\n            Tommy's Really Cool Plinko Game\\n          </a>\\n          © 2024\\n        </p>\\n        <a\\n          href=\\"https://github.com/Thomasborgor/thomasborgor.github.io\\"\\n          target=\\"_blank\\"\\n          rel=\\"noreferrer\\"\\n          class=\\"flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500\\"\\n        >\\n          <GitHubLogo class=\\"size-4\\" weight=\\"bold\\" />\\n          <span>Source Code</span>\\n        </a>\\n      </div>\\n    </div>\\n  </footer>\\n</div>\\n\\n<style>\\n  :global(body) {\\n    --tw-bg-opacity: 1;\\n    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))\\n}\\n</style>\\n"],"names":[],"mappings":"AAuEU,IAAM,CACZ,eAAe,CAAE,CAAC,CAClB,gBAAgB,CAAE,IAAI,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,eAAe,CAAC,EAAE,CAAC;AAC5D"}`
+  map: `{"version":3,"file":"+page.svelte","sources":["+page.svelte"],"sourcesContent":["<script lang=\\"ts\\">import logo from \\"$lib/assets/logo.svg\\";\\nimport Balance from \\"$lib/components/Balance.svelte\\";\\nimport LiveStatsWindow from \\"$lib/components/LiveStatsWindow/LiveStatsWindow.svelte\\";\\nimport Plinko from \\"$lib/components/Plinko\\";\\nimport SettingsWindow from \\"$lib/components/SettingsWindow\\";\\nimport DevWindow from \\"$lib/components/DevWindow\\";\\nimport Sidebar from \\"$lib/components/Sidebar\\";\\nimport { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from \\"$lib/utils/game\\";\\nimport GitHubLogo from \\"phosphor-svelte/lib/GithubLogo\\";\\nimport { onMount } from \\"svelte\\";\\nonMount(() => {\\n  setBalanceFromLocalStorage();\\n});\\n<\/script>\\n\\n<svelte:window on:beforeunload={writeBalanceToLocalStorage} />\\n\\n<div class=\\"relative flex min-h-dvh w-full flex-col\\">\\n<nav class=\\"sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg\\">\\n    <div class=\\"mx-auto flex h-14 max-w-7xl items-center justify-between\\">\\n      <img src={logo} alt=\\"logo\\" class=\\"h-6 sm:h-7\\" />\\n      <div class=\\"mx-auto\\">\\n        <Balance />\\n      </div>\\n    </div>\\n  </nav>\\n\\n  <div class=\\"flex-1 px-5\\">\\n    <div class=\\"mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl\\">\\n      <div class=\\"flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row\\">\\n        <Sidebar />\\n        <div class=\\"flex-1\\">\\n          <Plinko />\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <SettingsWindow />\\n  <LiveStatsWindow />\\n  <DevWindow />\\n  <footer class=\\"px-5 pb-4 pt-16\\">\\n    <div class=\\"mx-auto max-w-[40rem]\\">\\n      <div aria-hidden=\\"true\\" class=\\"h-[1px] bg-slate-700\\" />\\n      <div class=\\"flex items-center justify-between p-2\\">\\n        <p class=\\"text-sm text-slate-500\\">\\n          <a\\n            href=\\"/\\"\\n            target=\\"_blank\\"\\n            rel=\\"noreferrer\\"\\n            class=\\" text-cyan-600 transition hover:text-cyan-500\\"\\n          >\\n            Tommy's Really Cool Plinko Game\\n          </a>\\n          © 2024\\n        </p>\\n        <a\\n          href=\\"https://github.com/Thomasborgor/thomasborgor.github.io\\"\\n          target=\\"_blank\\"\\n          rel=\\"noreferrer\\"\\n          class=\\"flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500\\"\\n        >\\n          <GitHubLogo class=\\"size-4\\" weight=\\"bold\\" />\\n          <span>Source Code</span>\\n        </a>\\n      </div>\\n    </div>\\n  </footer>\\n</div>\\n\\n<style>\\n  :global(body) {\\n    --tw-bg-opacity: 1;\\n    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))\\n}\\n</style>\\n"],"names":[],"mappings":"AAuEU,IAAM,CACZ,eAAe,CAAE,CAAC,CAClB,gBAAgB,CAAE,IAAI,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,eAAe,CAAC,EAAE,CAAC;AAC5D"}`
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css);
