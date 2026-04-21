@@ -1,5 +1,5 @@
 import { d as set_current_component, f as current_component, r as run_all, o as onDestroy, h as get_store_value, i as createEventDispatcher, c as create_ssr_component, j as compute_rest_props, k as spread, l as escape_attribute_value, n as escape_object, a as add_attribute, s as setContext, g as getContext, b as subscribe, v as validate_component, e as escape, p as each } from "../../chunks/ssr.js";
-import { c as convertScale, b as balance, w as winRecords, f as formatCurrency, t as totalProfitHistory, i as isAnimationOn, a as bounciness, r as rowCount, d as riskLevel, e as autoBetIntervalMs, g as ignoreBetRules, p as plinkoEngine, h as betAmount, j as betAmountOfExistingBalls, B as BetMode, R as RiskLevel, k as rowCountOptions, P as Plinko } from "../../chunks/Plinko.js";
+import { c as convertScale, b as balance, a as betAmount, w as winRecords, f as formatCurrency, t as totalProfitHistory, i as isAnimationOn, d as bounciness, r as rowCount, e as riskLevel, g as autoBetIntervalMs, h as ignoreBetRules, p as plinkoEngine, j as betAmountOfExistingBalls, B as BetMode, R as RiskLevel, k as rowCountOptions, P as Plinko } from "../../chunks/Plinko.js";
 import "dequal";
 import { d as derived, w as writable, r as readable, a as readonly } from "../../chunks/index.js";
 import { o as onMount } from "../../chunks/ssr2.js";
@@ -8,6 +8,7 @@ import { flip, offset, shift, arrow, size, autoUpdate, computePosition } from "@
 import { createFocusTrap as createFocusTrap$1 } from "focus-trap";
 import { twMerge } from "tailwind-merge";
 import "chart.js/auto";
+import "matter-js";
 const globals = typeof window !== "undefined" ? window : typeof globalThis !== "undefined" ? globalThis : (
   // @ts-ignore Node typings have this
   global
@@ -2614,6 +2615,7 @@ const Tooltip_arrow = create_ssr_component(($$result, $$props, $$bindings, slots
 const isDevWindowOpen = writable(false);
 const isGameSettingsOpen = writable(false);
 const isLiveStatsOpen = writable(false);
+const isWheelWindowOpen = writable(false);
 const TerminalWindow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $$restProps = compute_rest_props($$props, ["weight", "color", "size", "mirrored"]);
   const { weight: ctxWeight, color: ctxColor, size: ctxSize, mirrored: ctxMirrored, ...restCtx } = getContext("iconCtx") || {};
@@ -2645,15 +2647,18 @@ const Balance = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let balanceFormatted;
   let $balance, $$unsubscribe_balance;
   let $isDevWindowOpen, $$unsubscribe_isDevWindowOpen;
+  let $$unsubscribe_betAmount;
   $$unsubscribe_balance = subscribe(balance, (value) => $balance = value);
   $$unsubscribe_isDevWindowOpen = subscribe(isDevWindowOpen, (value) => $isDevWindowOpen = value);
-  const addMoneyAmounts = [100, 500, 1e3, "Reset", "Set"];
+  $$unsubscribe_betAmount = subscribe(betAmount, (value) => value);
+  const addMoneyAmounts = [100, 500, 1e3, "Reset"];
   balanceFormatted = $balance.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   });
   $$unsubscribe_balance();
   $$unsubscribe_isDevWindowOpen();
+  $$unsubscribe_betAmount();
   return ` <div class="flex items-center gap-1"> <div class="flex gap-2 bg-slate-900 px-3 py-2 text-sm font-semibold tabular-nums text-white sm:text-base rounded-md"><span class="select-none text-gray-500" data-svelte-h="svelte-1d17qqv">$</span> <span class="min-w-16 text-right">${escape(balanceFormatted)}</span></div>  ${validate_component(Popover, "Popover.Root").$$render($$result, {}, {}, {
     default: () => {
       return `${validate_component(Popover_trigger, "Popover.Trigger").$$render(
@@ -3103,6 +3108,7 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   let $$unsubscribe_autoBetIntervalMs;
   let $$unsubscribe_balance;
   let $ignoreBetRules, $$unsubscribe_ignoreBetRules;
+  let $$unsubscribe_plinkoEngine;
   $$unsubscribe_isDevWindowOpen = subscribe(isDevWindowOpen, (value) => $isDevWindowOpen = value);
   $$unsubscribe_bounciness = subscribe(bounciness, (value) => value);
   $$unsubscribe_rowCount = subscribe(rowCount, (value) => value);
@@ -3110,6 +3116,7 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   $$unsubscribe_autoBetIntervalMs = subscribe(autoBetIntervalMs, (value) => value);
   $$unsubscribe_balance = subscribe(balance, (value) => value);
   $$unsubscribe_ignoreBetRules = subscribe(ignoreBetRules, (value) => $ignoreBetRules = value);
+  $$unsubscribe_plinkoEngine = subscribe(plinkoEngine, (value) => value);
   $$unsubscribe_isDevWindowOpen();
   $$unsubscribe_bounciness();
   $$unsubscribe_rowCount();
@@ -3117,6 +3124,7 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
   $$unsubscribe_autoBetIntervalMs();
   $$unsubscribe_balance();
   $$unsubscribe_ignoreBetRules();
+  $$unsubscribe_plinkoEngine();
   return `${$isDevWindowOpen ? `${validate_component(DraggableWindow, "DraggableWindow").$$render(
     $$result,
     {
@@ -3203,7 +3211,85 @@ const DevWindow = create_ssr_component(($$result, $$props, $$bindings, slots) =>
               return `Turn ignoreBetRules ${escape($ignoreBetRules ? "off" : "on")}`;
             }
           }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Wind X`;
+            }
+          }
+        )} ${validate_component(Button, "Button.Root").$$render(
+          $$result,
+          {
+            class: "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+          },
+          {},
+          {
+            default: () => {
+              return `Clear balls`;
+            }
+          }
         )}</div>`;
+      }
+    }
+  )}` : ``}`;
+});
+const GameController = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $$restProps = compute_rest_props($$props, ["weight", "color", "size", "mirrored"]);
+  const { weight: ctxWeight, color: ctxColor, size: ctxSize, mirrored: ctxMirrored, ...restCtx } = getContext("iconCtx") || {};
+  let { weight = ctxWeight ?? "regular" } = $$props;
+  let { color = ctxColor ?? "currentColor" } = $$props;
+  let { size: size2 = ctxSize ?? "1em" } = $$props;
+  let { mirrored = ctxMirrored || false } = $$props;
+  if ($$props.weight === void 0 && $$bindings.weight && weight !== void 0) $$bindings.weight(weight);
+  if ($$props.color === void 0 && $$bindings.color && color !== void 0) $$bindings.color(color);
+  if ($$props.size === void 0 && $$bindings.size && size2 !== void 0) $$bindings.size(size2);
+  if ($$props.mirrored === void 0 && $$bindings.mirrored && mirrored !== void 0) $$bindings.mirrored(mirrored);
+  return `  <svg${spread(
+    [
+      { xmlns: "http://www.w3.org/2000/svg" },
+      { width: escape_attribute_value(size2) },
+      { height: escape_attribute_value(size2) },
+      { fill: escape_attribute_value(color) },
+      {
+        transform: escape_attribute_value(mirrored ? "scale(-1, 1)" : void 0)
+      },
+      { viewBox: "0 0 256 256" },
+      escape_object(restCtx),
+      escape_object($$restProps)
+    ],
+    {}
+  )}>${slots.default ? slots.default({}) : ``}<rect width="256" height="256" fill="none"></rect>${weight === "bold" ? `<path d="M176,116H152a12,12,0,0,1,0-24h24a12,12,0,0,1,0,24ZM104,92h-4V88a12,12,0,0,0-24,0v4H72a12,12,0,0,0,0,24h4v4a12,12,0,0,0,24,0v-4h4a12,12,0,0,0,0-24ZM244.76,202.94a40,40,0,0,1-61,5.35,7,7,0,0,1-.53-.56L144.67,164H111.33L72.81,207.73c-.17.19-.35.38-.53.56A40,40,0,0,1,4.62,173.05a1.18,1.18,0,0,1,0-.2L21,88.79A63.88,63.88,0,0,1,83.88,36H172a64.08,64.08,0,0,1,62.93,52.48,1.8,1.8,0,0,1,0,.19l16.36,84.17a1.77,1.77,0,0,1,0,.2A39.74,39.74,0,0,1,244.76,202.94ZM172,140a40,40,0,0,0,0-80H83.89A39.9,39.9,0,0,0,44.62,93.06a1.55,1.55,0,0,0,0,.21l-16.34,84a16,16,0,0,0,13,18.44,16.07,16.07,0,0,0,13.86-4.21L96.9,144.07a12,12,0,0,1,9-4.07Zm55.76,37.31-7-35.95a63.84,63.84,0,0,1-44.27,22.46l24.41,27.72a16,16,0,0,0,26.85-14.23Z"></path>` : `${weight === "duotone" ? `<path d="M216.86,207.57a28,28,0,0,1-24.66-7.77L150.09,152H172a51.94,51.94,0,0,0,51.2-61h0l16.36,84.17A28,28,0,0,1,216.86,207.57Z" opacity="0.2"></path><path d="M176,112H152a8,8,0,0,1,0-16h24a8,8,0,0,1,0,16ZM104,96H96V88a8,8,0,0,0-16,0v8H72a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0v-8h8a8,8,0,0,0,0-16ZM241.48,200.65a36,36,0,0,1-54.94,4.81c-.12-.12-.24-.24-.35-.37L146.48,160h-37L69.81,205.09l-.35.37A36.08,36.08,0,0,1,44,216,36,36,0,0,1,8.56,173.75a.68.68,0,0,1,0-.14L24.93,89.52A59.88,59.88,0,0,1,83.89,40H172a60.08,60.08,0,0,1,59,49.25c0,.06,0,.12,0,.18l16.37,84.17a.68.68,0,0,1,0,.14A35.74,35.74,0,0,1,241.48,200.65ZM172,144a44,44,0,0,0,0-88H83.89A43.9,43.9,0,0,0,40.68,92.37l0,.13L24.3,176.59A20,20,0,0,0,58,194.3l41.92-47.59a8,8,0,0,1,6-2.71Zm59.7,32.59-8.74-45A60,60,0,0,1,172,160h-4.2L198,194.31a20.09,20.09,0,0,0,17.46,5.39,20,20,0,0,0,16.23-23.11Z"></path>` : `${weight === "fill" ? `<path d="M247.44,173.75a.68.68,0,0,0,0-.14L231.05,89.44c0-.06,0-.12,0-.18A60.08,60.08,0,0,0,172,40H83.89a59.88,59.88,0,0,0-59,49.52L8.58,173.61a.68.68,0,0,0,0,.14,36,36,0,0,0,60.9,31.71l.35-.37L109.52,160h37l39.71,45.09c.11.13.23.25.35.37A36.08,36.08,0,0,0,212,216a36,36,0,0,0,35.43-42.25ZM104,112H96v8a8,8,0,0,1-16,0v-8H72a8,8,0,0,1,0-16h8V88a8,8,0,0,1,16,0v8h8a8,8,0,0,1,0,16Zm40-8a8,8,0,0,1,8-8h24a8,8,0,0,1,0,16H152A8,8,0,0,1,144,104Zm84.37,87.47a19.84,19.84,0,0,1-12.9,8.23A20.09,20.09,0,0,1,198,194.31L167.8,160H172a60,60,0,0,0,51-28.38l8.74,45A19.82,19.82,0,0,1,228.37,191.47Z"></path>` : `${weight === "light" ? `<path d="M176,110H152a6,6,0,0,1,0-12h24a6,6,0,0,1,0,12ZM104,98H94V88a6,6,0,0,0-12,0V98H72a6,6,0,0,0,0,12H82v10a6,6,0,0,0,12,0V110h10a6,6,0,0,0,0-12ZM239.84,199.5A34,34,0,0,1,212,214,34.11,34.11,0,0,1,188,204.05l-.26-.28L147.38,158H108.62L68.31,203.76,68,204A34,34,0,0,1,44,214a34,34,0,0,1-33.46-39.91s0-.06,0-.1L26.9,89.88A57.89,57.89,0,0,1,83.89,42H172a58.07,58.07,0,0,1,57.05,47.63c0,.07,0,.12,0,.19L245.46,174s0,.07,0,.11A33.75,33.75,0,0,1,239.84,199.5ZM172,146a46,46,0,0,0,0-92H83.89A45.9,45.9,0,0,0,38.71,92a.36.36,0,0,0,0,.1L22.33,176.23a22,22,0,0,0,37.11,19.45l42-47.65a6,6,0,0,1,4.5-2Zm61.67,30.23-9.79-50.35A58.06,58.06,0,0,1,172,158h-8.63l33.19,37.68a22,22,0,0,0,37.11-19.45Z"></path>` : `${weight === "regular" ? `<path d="M176,112H152a8,8,0,0,1,0-16h24a8,8,0,0,1,0,16ZM104,96H96V88a8,8,0,0,0-16,0v8H72a8,8,0,0,0,0,16h8v8a8,8,0,0,0,16,0v-8h8a8,8,0,0,0,0-16ZM241.48,200.65a36,36,0,0,1-54.94,4.81c-.12-.12-.24-.24-.35-.37L146.48,160h-37L69.81,205.09l-.35.37A36.08,36.08,0,0,1,44,216,36,36,0,0,1,8.56,173.75a.68.68,0,0,1,0-.14L24.93,89.52A59.88,59.88,0,0,1,83.89,40H172a60.08,60.08,0,0,1,59,49.25c0,.06,0,.12,0,.18l16.37,84.17a.68.68,0,0,1,0,.14A35.74,35.74,0,0,1,241.48,200.65ZM172,144a44,44,0,0,0,0-88H83.89A43.9,43.9,0,0,0,40.68,92.37l0,.13L24.3,176.59A20,20,0,0,0,58,194.3l41.92-47.59a8,8,0,0,1,6-2.71Zm59.7,32.59-8.74-45A60,60,0,0,1,172,160h-4.2L198,194.31a20.09,20.09,0,0,0,17.46,5.39,20,20,0,0,0,16.23-23.11Z"></path>` : `${weight === "thin" ? `<path d="M176,108H152a4,4,0,0,1,0-8h24a4,4,0,0,1,0,8Zm-72-8H92V88a4,4,0,0,0-8,0v12H72a4,4,0,0,0,0,8H84v12a4,4,0,0,0,8,0V108h12a4,4,0,0,0,0-8Zm134.21,98.36a32,32,0,0,1-48.84,4.27l-.17-.18L148.29,156H107.72L66.81,202.44l-.18.19A32.08,32.08,0,0,1,44,212a32,32,0,0,1-31.5-37.56L28.87,90.21A55.87,55.87,0,0,1,83.89,44H172a56.07,56.07,0,0,1,55.1,46.1.29.29,0,0,1,0,.1l16.37,84.16A31.86,31.86,0,0,1,238.21,198.36ZM172,148a48,48,0,1,0,0-96H83.9A47.9,47.9,0,0,0,36.74,91.67L20.36,175.9a24,24,0,0,0,19.48,27.73,24,24,0,0,0,21-6.58l42-47.69a4,4,0,0,1,3-1.36Zm63.63,27.83-11-56.66A56.09,56.09,0,0,1,172,156H159l36.16,41.06a24,24,0,0,0,40.52-21.23Z"></path>` : `${escape((console.error('Unsupported icon weight. Choose from "thin", "light", "regular", "bold", "fill", or "duotone".'), ""))}`}`}`}`}`}`}</svg>`;
+});
+const WheelWindow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  let $isWheelWindowOpen, $$unsubscribe_isWheelWindowOpen;
+  $$unsubscribe_isWheelWindowOpen = subscribe(isWheelWindowOpen, (value) => $isWheelWindowOpen = value);
+  $$unsubscribe_isWheelWindowOpen();
+  return `${$isWheelWindowOpen ? `${validate_component(DraggableWindow, "DraggableWindow").$$render(
+    $$result,
+    {
+      onClose: () => $isWheelWindowOpen = false,
+      class: "fixed bottom-8 right-8 w-[27.5rem]"
+    },
+    {},
+    {
+      title: () => {
+        return `${validate_component(GameController, "GameController").$$render(
+          $$result,
+          {
+            weight: "bold",
+            class: "text-xl text-slate-300"
+          },
+          {},
+          {}
+        )} <p class="text-sm font-medium text-white" data-svelte-h="svelte-1xwqa13">Wheel Of Benevolence</p> `;
+      },
+      default: () => {
+        return `<iframe width="410" height="460" src="https://academy.cs.cmu.edu/sharing/blackSnail899568/embed" data-svelte-h="svelte-1s1j7tm"></iframe>`;
       }
     }
   )}` : ``}`;
@@ -3277,6 +3363,7 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $rowCount, $$unsubscribe_rowCount;
   let $isGameSettingsOpen, $$unsubscribe_isGameSettingsOpen;
   let $isLiveStatsOpen, $$unsubscribe_isLiveStatsOpen;
+  let $isWheelWindowOpen, $$unsubscribe_isWheelWindowOpen;
   $$unsubscribe_plinkoEngine = subscribe(plinkoEngine, (value) => $plinkoEngine = value);
   $$unsubscribe_betAmount = subscribe(betAmount, (value) => $betAmount = value);
   $$unsubscribe_betAmountOfExistingBalls = subscribe(betAmountOfExistingBalls, (value) => $betAmountOfExistingBalls = value);
@@ -3286,6 +3373,7 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_rowCount = subscribe(rowCount, (value) => $rowCount = value);
   $$unsubscribe_isGameSettingsOpen = subscribe(isGameSettingsOpen, (value) => $isGameSettingsOpen = value);
   $$unsubscribe_isLiveStatsOpen = subscribe(isLiveStatsOpen, (value) => $isLiveStatsOpen = value);
+  $$unsubscribe_isWheelWindowOpen = subscribe(isWheelWindowOpen, (value) => $isWheelWindowOpen = value);
   let betMode = BetMode.MANUAL;
   let autoBetInput = 0;
   let autoBetInterval = null;
@@ -3440,6 +3528,35 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
           }
         )}`;
       }
+    })} ${validate_component(Tooltip, "Tooltip.Root").$$render($$result, { openDelay: 0, closeOnPointerDown: false }, {}, {
+      default: () => {
+        return `${validate_component(Tooltip_trigger, "Tooltip.Trigger").$$render($$result, { asChild: true }, {}, {
+          default: ({ builder }) => {
+            return `<button${spread(
+              [
+                escape_object(builder),
+                {
+                  class: escape_attribute_value(twMerge("rounded-full p-2 text-slate-300 transition hover:bg-slate-600 active:bg-slate-500", $isWheelWindowOpen && "text-slate-100"))
+                }
+              ],
+              {}
+            )}>${validate_component(GameController, "GameController").$$render($$result, { class: "size-6", weight: "bold" }, {}, {})}</button>`;
+          }
+        })} ${validate_component(Tooltip_content, "Tooltip.Content").$$render(
+          $$result,
+          {
+            transition: flyAndScale,
+            sideOffset: 4,
+            class: "z-30 max-w-lg rounded-md bg-white p-3 text-sm font-medium text-gray-950 drop-shadow-xl"
+          },
+          {},
+          {
+            default: () => {
+              return `${validate_component(Tooltip_arrow, "Tooltip.Arrow").$$render($$result, {}, {}, {})} <p>${escape($isWheelWindowOpen ? "Close" : "Open")} Wheel of Benevolence</p>`;
+            }
+          }
+        )}`;
+      }
     })}</div></div></div>`;
   } while (!$$settled);
   $$unsubscribe_plinkoEngine();
@@ -3451,6 +3568,7 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_rowCount();
   $$unsubscribe_isGameSettingsOpen();
   $$unsubscribe_isLiveStatsOpen();
+  $$unsubscribe_isWheelWindowOpen();
   return $$rendered;
 });
 const GithubLogo = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -3482,11 +3600,11 @@ const GithubLogo = create_ssr_component(($$result, $$props, $$bindings, slots) =
 });
 const css = {
   code: "body{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))\n}",
-  map: `{"version":3,"file":"+page.svelte","sources":["+page.svelte"],"sourcesContent":["<script lang=\\"ts\\">import logo from \\"$lib/assets/logo.svg\\";\\nimport Balance from \\"$lib/components/Balance.svelte\\";\\nimport LiveStatsWindow from \\"$lib/components/LiveStatsWindow/LiveStatsWindow.svelte\\";\\nimport Plinko from \\"$lib/components/Plinko\\";\\nimport SettingsWindow from \\"$lib/components/SettingsWindow\\";\\nimport DevWindow from \\"$lib/components/DevWindow\\";\\nimport Sidebar from \\"$lib/components/Sidebar\\";\\nimport { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from \\"$lib/utils/game\\";\\nimport GitHubLogo from \\"phosphor-svelte/lib/GithubLogo\\";\\nimport { onMount } from \\"svelte\\";\\nonMount(() => {\\n  setBalanceFromLocalStorage();\\n});\\n<\/script>\\n\\n<svelte:window on:beforeunload={writeBalanceToLocalStorage} />\\n\\n<div class=\\"relative flex min-h-dvh w-full flex-col\\">\\n<nav class=\\"sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg\\">\\n    <div class=\\"mx-auto flex h-14 max-w-7xl items-center justify-between\\">\\n      <img src={logo} alt=\\"logo\\" class=\\"h-6 sm:h-7\\" />\\n      <div class=\\"mx-auto\\">\\n        <Balance />\\n      </div>\\n    </div>\\n  </nav>\\n\\n  <div class=\\"flex-1 px-5\\">\\n    <div class=\\"mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl\\">\\n      <div class=\\"flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row\\">\\n        <Sidebar />\\n        <div class=\\"flex-1\\">\\n          <Plinko />\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <SettingsWindow />\\n  <LiveStatsWindow />\\n  <DevWindow />\\n  <footer class=\\"px-5 pb-4 pt-16\\">\\n    <div class=\\"mx-auto max-w-[40rem]\\">\\n      <div aria-hidden=\\"true\\" class=\\"h-[1px] bg-slate-700\\" />\\n      <div class=\\"flex items-center justify-between p-2\\">\\n        <p class=\\"text-sm text-slate-500\\">\\n          <a\\n            href=\\"/\\"\\n            target=\\"_blank\\"\\n            rel=\\"noreferrer\\"\\n            class=\\" text-cyan-600 transition hover:text-cyan-500\\"\\n          >\\n            Tommy's Really Cool Plinko Game\\n          </a>\\n          © 2024\\n        </p>\\n        <a\\n          href=\\"https://github.com/Thomasborgor/thomasborgor.github.io\\"\\n          target=\\"_blank\\"\\n          rel=\\"noreferrer\\"\\n          class=\\"flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500\\"\\n        >\\n          <GitHubLogo class=\\"size-4\\" weight=\\"bold\\" />\\n          <span>Source Code</span>\\n        </a>\\n      </div>\\n    </div>\\n  </footer>\\n</div>\\n\\n<style>\\n  :global(body) {\\n    --tw-bg-opacity: 1;\\n    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))\\n}\\n</style>\\n"],"names":[],"mappings":"AAuEU,IAAM,CACZ,eAAe,CAAE,CAAC,CAClB,gBAAgB,CAAE,IAAI,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,eAAe,CAAC,EAAE,CAAC;AAC5D"}`
+  map: `{"version":3,"file":"+page.svelte","sources":["+page.svelte"],"sourcesContent":["<script lang=\\"ts\\">import logo from \\"$lib/assets/logo.svg\\";\\nimport Balance from \\"$lib/components/Balance.svelte\\";\\nimport LiveStatsWindow from \\"$lib/components/LiveStatsWindow/LiveStatsWindow.svelte\\";\\nimport Plinko from \\"$lib/components/Plinko\\";\\nimport SettingsWindow from \\"$lib/components/SettingsWindow\\";\\nimport DevWindow from \\"$lib/components/DevWindow\\";\\nimport WheelWindow from \\"$lib/components/WheelWindow\\";\\nimport Sidebar from \\"$lib/components/Sidebar\\";\\nimport { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from \\"$lib/utils/game\\";\\nimport GitHubLogo from \\"phosphor-svelte/lib/GithubLogo\\";\\nimport { onMount } from \\"svelte\\";\\nonMount(() => {\\n  setBalanceFromLocalStorage();\\n});\\n<\/script>\\n\\n<svelte:window on:beforeunload={writeBalanceToLocalStorage} />\\n\\n<div class=\\"relative flex min-h-dvh w-full flex-col\\">\\n<nav class=\\"sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg\\">\\n    <div class=\\"mx-auto flex h-14 max-w-7xl items-center justify-between\\">\\n      <img src={logo} alt=\\"logo\\" class=\\"h-6 sm:h-7\\" />\\n      <div class=\\"mx-auto\\">\\n        <Balance />\\n      </div>\\n    </div>\\n  </nav>\\n\\n  <div class=\\"flex-1 px-5\\">\\n    <div class=\\"mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl\\">\\n      <div class=\\"flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row\\">\\n        <Sidebar />\\n        <div class=\\"flex-1\\">\\n          <Plinko />\\n        </div>\\n      </div>\\n    </div>\\n  </div>\\n\\n  <SettingsWindow />\\n  <LiveStatsWindow />\\n  <DevWindow />\\n  <WheelWindow />\\n  <footer class=\\"px-5 pb-4 pt-16\\">\\n    <div class=\\"mx-auto max-w-[40rem]\\">\\n      <div aria-hidden=\\"true\\" class=\\"h-[1px] bg-slate-700\\" />\\n      <div class=\\"flex items-center justify-between p-2\\">\\n        <p class=\\"text-sm text-slate-500\\">\\n          <a\\n            href=\\"/\\"\\n            target=\\"_blank\\"\\n            rel=\\"noreferrer\\"\\n            class=\\" text-cyan-600 transition hover:text-cyan-500\\"\\n          >\\n            Tommy's Really Cool Plinko Game\\n          </a>\\n          © 2024\\n        </p>\\n        <a\\n          href=\\"https://github.com/Thomasborgor/thomasborgor.github.io\\"\\n          target=\\"_blank\\"\\n          rel=\\"noreferrer\\"\\n          class=\\"flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500\\"\\n        >\\n          <GitHubLogo class=\\"size-4\\" weight=\\"bold\\" />\\n          <span>Source Code</span>\\n        </a>\\n      </div>\\n    </div>\\n  </footer>\\n</div>\\n\\n<style>\\n  :global(body) {\\n    --tw-bg-opacity: 1;\\n    background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1))\\n}\\n</style>\\n"],"names":[],"mappings":"AAyEU,IAAM,CACZ,eAAe,CAAE,CAAC,CAClB,gBAAgB,CAAE,IAAI,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,CAAC,CAAC,IAAI,eAAe,CAAC,EAAE,CAAC;AAC5D"}`
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$result.css.add(css);
-  return ` <div class="relative flex min-h-dvh w-full flex-col"><nav class="sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg"><div class="mx-auto flex h-14 max-w-7xl items-center justify-between"><img${add_attribute("src", logo, 0)} alt="logo" class="h-6 sm:h-7"> <div class="mx-auto">${validate_component(Balance, "Balance").$$render($$result, {}, {}, {})}</div></div></nav> <div class="flex-1 px-5"><div class="mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl"><div class="flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row">${validate_component(Sidebar, "Sidebar").$$render($$result, {}, {}, {})} <div class="flex-1">${validate_component(Plinko, "Plinko").$$render($$result, {}, {}, {})}</div></div></div></div> ${validate_component(SettingsWindow, "SettingsWindow").$$render($$result, {}, {}, {})} ${validate_component(LiveStatsWindow, "LiveStatsWindow").$$render($$result, {}, {}, {})} ${validate_component(DevWindow, "DevWindow").$$render($$result, {}, {}, {})} <footer class="px-5 pb-4 pt-16"><div class="mx-auto max-w-[40rem]"><div aria-hidden="true" class="h-[1px] bg-slate-700"></div> <div class="flex items-center justify-between p-2"><p class="text-sm text-slate-500" data-svelte-h="svelte-1mo5os0"><a href="/" target="_blank" rel="noreferrer" class="text-cyan-600 transition hover:text-cyan-500">Tommy&#39;s Really Cool Plinko Game</a>
+  return ` <div class="relative flex min-h-dvh w-full flex-col"><nav class="sticky top-0 z-10 w-full bg-gray-700 px-5 drop-shadow-lg"><div class="mx-auto flex h-14 max-w-7xl items-center justify-between"><img${add_attribute("src", logo, 0)} alt="logo" class="h-6 sm:h-7"> <div class="mx-auto">${validate_component(Balance, "Balance").$$render($$result, {}, {}, {})}</div></div></nav> <div class="flex-1 px-5"><div class="mx-auto mt-5 min-w-[300px] max-w-xl drop-shadow-xl md:mt-10 lg:max-w-7xl"><div class="flex flex-col-reverse overflow-hidden rounded-lg lg:w-full lg:flex-row">${validate_component(Sidebar, "Sidebar").$$render($$result, {}, {}, {})} <div class="flex-1">${validate_component(Plinko, "Plinko").$$render($$result, {}, {}, {})}</div></div></div></div> ${validate_component(SettingsWindow, "SettingsWindow").$$render($$result, {}, {}, {})} ${validate_component(LiveStatsWindow, "LiveStatsWindow").$$render($$result, {}, {}, {})} ${validate_component(DevWindow, "DevWindow").$$render($$result, {}, {}, {})} ${validate_component(WheelWindow, "WheelWindow").$$render($$result, {}, {}, {})} <footer class="px-5 pb-4 pt-16"><div class="mx-auto max-w-[40rem]"><div aria-hidden="true" class="h-[1px] bg-slate-700"></div> <div class="flex items-center justify-between p-2"><p class="text-sm text-slate-500" data-svelte-h="svelte-1mo5os0"><a href="/" target="_blank" rel="noreferrer" class="text-cyan-600 transition hover:text-cyan-500">Tommy&#39;s Really Cool Plinko Game</a>
           © 2024</p> <a href="https://github.com/Thomasborgor/thomasborgor.github.io" target="_blank" rel="noreferrer" class="flex items-center gap-1 p-1 text-sm text-slate-500 transition hover:text-cyan-500">${validate_component(GithubLogo, "GitHubLogo").$$render($$result, { class: "size-4", weight: "bold" }, {}, {})} <span data-svelte-h="svelte-sri54o">Source Code</span></a></div></div></footer> </div>`;
 });
 export {

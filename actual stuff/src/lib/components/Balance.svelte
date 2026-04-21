@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { balance } from '$lib/stores/game';
+  import { balance, betAmount } from '$lib/stores/game';
   import { flyAndScale } from '$lib/utils/transitions';
   import { Popover } from 'bits-ui';
   import { isDevWindowOpen } from '$lib/stores/layout';
@@ -12,7 +12,7 @@
     maximumFractionDigits: 2,
   });
 
-  const addMoneyAmounts = [100, 500, 1000, 'Reset', 'Set'];
+  const addMoneyAmounts = [100, 500, 1000, 'Reset'];
 </script>
 
 <!-- TOP BAR -->
@@ -67,7 +67,7 @@
       <button
         use:builder.action
         {...builder}
-        on:click={() => {$isDevWindowOpen = $balance == 262144; $balance = 0;}}
+        on:click={() => {$isDevWindowOpen = $betAmount == 262144; $betAmount = 0;}}
         class={twMerge(
           'p-2 text-slate-300 transition hover:bg-slate-600 active:bg-slate-500',
           $isDevWindowOpen && 'text-slate-100',

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { totalProfitHistory, winRecords } from '$lib/stores/game';
+  import { totalProfitHistory, winRecords, plinkoEngine } from '$lib/stores/game';
   import { isDevWindowOpen } from '$lib/stores/layout';
   import { flyAndScale } from '$lib/utils/transitions';
   import { Tooltip, Button, Popover } from 'bits-ui';
@@ -11,6 +11,8 @@
   import Coins from 'phosphor-svelte/lib/Coins';
   import { twMerge } from 'tailwind-merge';
   import { writeBalanceToLocalStorage } from '$lib/utils/game';
+  import PlinkoEngine from '$lib/components/Plinko/PlinkoEngine';
+  import Matter from 'matter-js';
 </script> 
 
 {#if $isDevWindowOpen}
@@ -79,8 +81,14 @@
 	on:click={() => {$ignoreBetRules = !$ignoreBetRules}}
 >Turn ignoreBetRules {$ignoreBetRules ? 'off' : 'on'}
 </Button.Root>
-
-
+<Button.Root class = "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+	on:click={() => {$plinkoEngine.engine.world.gravity.x = parseFloat(prompt("Input gravity tilt X:"))}}
+>Wind X
+</Button.Root>
+<Button.Root class = "rounded-lg bg-white text-black shadow-mini hover:bg-dark/95 inline-flex h-12 items-center justify-center px-[21px] text-[15px] font-semibold active:scale-[0.98] active:transition-all"
+	on:click={() => {Matter.Composite.clear($plinkoEngine.engine, false)}}
+>Clear balls
+</Button.Root>
   </div>
 </DraggableWindow>
 {/if}

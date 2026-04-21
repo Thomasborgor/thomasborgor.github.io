@@ -5,6 +5,7 @@
   import Plinko from '$lib/components/Plinko';
   import SettingsWindow from '$lib/components/SettingsWindow';
   import DevWindow from '$lib/components/DevWindow';
+  import WheelWindow from '$lib/components/WheelWindow';
   import Sidebar from '$lib/components/Sidebar';
   import { setBalanceFromLocalStorage, writeBalanceToLocalStorage } from '$lib/utils/game';
   import GitHubLogo from 'phosphor-svelte/lib/GithubLogo';
@@ -41,6 +42,7 @@
   <SettingsWindow />
   <LiveStatsWindow />
   <DevWindow />
+  <WheelWindow />
   <footer class="px-5 pb-4 pt-16">
     <div class="mx-auto max-w-[40rem]">
       <div aria-hidden="true" class="h-[1px] bg-slate-700" />

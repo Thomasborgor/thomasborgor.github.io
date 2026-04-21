@@ -124,42 +124,58 @@ const binPayouts = {
   9: {
     [RiskLevel.LOW]: [5.6, 2, 1.6, 1, 0.7, 0.7, 1, 1.6, 2, 5.6],
     [RiskLevel.MEDIUM]: [18, 4, 1.7, 0.9, 0.5, 0.5, 0.9, 1.7, 4, 18],
-    [RiskLevel.HIGH]: [43, 7, 2, 0.6, 0.2, 0.2, 0.6, 2, 7, 43]
+    [RiskLevel.HIGH]: [43, 7, 2, 0.6, 0.2, 0.2, 0.6, 2, 7, 43],
+    [RiskLevel.EXTREME]: [90, 2, -2, -5, -9, -9, -5, -2, 2, 90],
+    [RiskLevel.DOPAMINE]: [10, 14, 18, 22, 26, 26, 22, 18, 14, 10]
   },
   10: {
     [RiskLevel.LOW]: [8.9, 3, 1.4, 1.1, 1, 0.5, 1, 1.1, 1.4, 3, 8.9],
     [RiskLevel.MEDIUM]: [22, 5, 2, 1.4, 0.6, 0.4, 0.6, 1.4, 2, 5, 22],
-    [RiskLevel.HIGH]: [76, 10, 3, 0.9, 0.3, 0.2, 0.3, 0.9, 3, 10, 76]
+    [RiskLevel.HIGH]: [76, 10, 3, 0.9, 0.3, 0.2, 0.3, 0.9, 3, 10, 76],
+    [RiskLevel.EXTREME]: [130, 4, 0, -4, -8, -12, -8, -4, 0, 4, 130],
+    [RiskLevel.DOPAMINE]: [10, 13, 17, 21, 25, 28, 25, 21, 17, 13, 10]
   },
   11: {
     [RiskLevel.LOW]: [8.4, 3, 1.9, 1.3, 1, 0.7, 0.7, 1, 1.3, 1.9, 3, 8.4],
     [RiskLevel.MEDIUM]: [24, 6, 3, 1.8, 0.7, 0.5, 0.5, 0.7, 1.8, 3, 6, 24],
-    [RiskLevel.HIGH]: [120, 14, 5.2, 1.4, 0.4, 0.2, 0.2, 0.4, 1.4, 5.2, 14, 120]
+    [RiskLevel.HIGH]: [120, 14, 5.2, 1.4, 0.4, 0.2, 0.2, 0.4, 1.4, 5.2, 14, 120],
+    [RiskLevel.EXTREME]: [180, 6, 1, -3, -7, -11, -11, -7, -3, 1, 6, 180],
+    [RiskLevel.DOPAMINE]: [10, 12, 16, 20, 24, 27, 27, 24, 20, 16, 12, 10]
   },
   12: {
     [RiskLevel.LOW]: [10, 3, 1.6, 1.4, 1.1, 1, 0.5, 1, 1.1, 1.4, 1.6, 3, 10],
     [RiskLevel.MEDIUM]: [33, 11, 4, 2, 1.1, 0.6, 0.3, 0.6, 1.1, 2, 4, 11, 33],
-    [RiskLevel.HIGH]: [170, 24, 8.1, 2, 0.7, 0.2, 0.2, 0.2, 0.7, 2, 8.1, 24, 170]
+    [RiskLevel.HIGH]: [170, 24, 8.1, 2, 0.7, 0.2, 0.2, 0.2, 0.7, 2, 8.1, 24, 170],
+    [RiskLevel.EXTREME]: [260, 10, 3, 0, -5, -9, -13, -9, -5, 0, 3, 10, 260],
+    [RiskLevel.DOPAMINE]: [10, 12, 15, 19, 23, 26, 29, 26, 23, 19, 15, 12, 10]
   },
   13: {
     [RiskLevel.LOW]: [8.1, 4, 3, 1.9, 1.2, 0.9, 0.7, 0.7, 0.9, 1.2, 1.9, 3, 4, 8.1],
     [RiskLevel.MEDIUM]: [43, 13, 6, 3, 1.3, 0.7, 0.4, 0.4, 0.7, 1.3, 3, 6, 13, 43],
-    [RiskLevel.HIGH]: [260, 37, 11, 4, 1, 0.2, 0.2, 0.2, 0.2, 1, 4, 11, 37, 260]
+    [RiskLevel.HIGH]: [260, 37, 11, 4, 1, 0.2, 0.2, 0.2, 0.2, 1, 4, 11, 37, 260],
+    [RiskLevel.EXTREME]: [380, 14, 5, 1, -4, -8, -12, -12, -8, -4, 1, 5, 14, 380],
+    [RiskLevel.DOPAMINE]: [10, 11, 14, 18, 22, 25, 28, 28, 25, 22, 18, 14, 11, 10]
   },
   14: {
     [RiskLevel.LOW]: [7.1, 4, 1.9, 1.4, 1.3, 1.1, 1, 0.5, 1, 1.1, 1.3, 1.4, 1.9, 4, 7.1],
     [RiskLevel.MEDIUM]: [58, 15, 7, 4, 1.9, 1, 0.5, 0.2, 0.5, 1, 1.9, 4, 7, 15, 58],
-    [RiskLevel.HIGH]: [420, 56, 18, 5, 1.9, 0.3, 0.2, 0.2, 0.2, 0.3, 1.9, 5, 18, 56, 420]
+    [RiskLevel.HIGH]: [420, 56, 18, 5, 1.9, 0.3, 0.2, 0.2, 0.2, 0.3, 1.9, 5, 18, 56, 420],
+    [RiskLevel.EXTREME]: [550, 20, 8, 3, 0, -5, -9, -13, -9, -5, 0, 3, 8, 20, 550],
+    [RiskLevel.DOPAMINE]: [10, 11, 13, 17, 21, 24, 27, 30, 27, 24, 21, 17, 13, 11, 10]
   },
   15: {
     [RiskLevel.LOW]: [15, 8, 3, 2, 1.5, 1.1, 1, 0.7, 0.7, 1, 1.1, 1.5, 2, 3, 8, 15],
     [RiskLevel.MEDIUM]: [88, 18, 11, 5, 3, 1.3, 0.5, 0.3, 0.3, 0.5, 1.3, 3, 5, 11, 18, 88],
-    [RiskLevel.HIGH]: [620, 83, 27, 8, 3, 0.5, 0.2, 0.2, 0.2, 0.2, 0.5, 3, 8, 27, 83, 620]
+    [RiskLevel.HIGH]: [620, 83, 27, 8, 3, 0.5, 0.2, 0.2, 0.2, 0.2, 0.5, 3, 8, 27, 83, 620],
+    [RiskLevel.EXTREME]: [800, 30, 12, 5, 2, -3, -7, -11, -11, -7, -3, 2, 5, 12, 30, 800],
+    [RiskLevel.DOPAMINE]: [10, 10, 12, 16, 20, 23, 26, 29, 29, 26, 23, 20, 16, 12, 10, 10]
   },
   16: {
     [RiskLevel.LOW]: [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16],
     [RiskLevel.MEDIUM]: [110, 41, 10, 5, 3, 1.5, 1, 0.5, 0.3, 0.5, 1, 1.5, 3, 5, 10, 41, 110],
-    [RiskLevel.HIGH]: [1e3, 130, 26, 9, 4, 2, 0.2, 0.2, 0.2, 0.2, 0.2, 2, 4, 9, 26, 130, 1e3]
+    [RiskLevel.HIGH]: [1e3, 130, 26, 9, 4, 2, 0.2, 0.2, 0.2, 0.2, 0.2, 2, 4, 9, 26, 130, 1e3],
+    [RiskLevel.EXTREME]: [2e3, 45, 18, 8, 3, 0, -5, -9, -13, -9, -5, 0, 3, 8, 18, 45, 2e3],
+    [RiskLevel.DOPAMINE]: [10, 10, 11, 15, 19, 22, 25, 28, 31, 28, 25, 22, 19, 15, 11, 10, 10]
   }
 };
 const runtimePayouts = writable(structuredClone(binPayouts));
@@ -677,7 +693,7 @@ const BinsRow = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     return ` <div class="flex min-w-0 flex-1 items-center justify-center rounded-sm text-[clamp(6px,2.784px+0.87vw,8px)] font-bold text-gray-950 shadow-[0_2px_var(--shadow-color)] lg:rounded-md lg:text-[clamp(10px,-16.944px+2.632vw,12px)] lg:shadow-[0_3px_var(--shadow-color)]"${add_styles({
       "background-color": binColorsByRowCount[$rowCount].background[binIndex],
       "--shadow-color": binColorsByRowCount[$rowCount].shadow[binIndex]
-    })}>${escape(payout)}${escape(payout < 100 ? "×" : "")} </div>`;
+    })}>${escape(payout)} </div>`;
   })}</div>` : ``}</div>`;
 });
 const LastWins = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -713,14 +729,14 @@ export {
   BetMode as B,
   Plinko as P,
   RiskLevel as R,
-  bounciness as a,
+  betAmount as a,
   balance as b,
   convertScale as c,
-  riskLevel as d,
-  autoBetIntervalMs as e,
+  bounciness as d,
+  riskLevel as e,
   formatCurrency as f,
-  ignoreBetRules as g,
-  betAmount as h,
+  autoBetIntervalMs as g,
+  ignoreBetRules as h,
   isAnimationOn as i,
   betAmountOfExistingBalls as j,
   rowCountOptions as k,

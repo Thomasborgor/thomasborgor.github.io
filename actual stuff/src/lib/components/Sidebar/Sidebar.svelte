@@ -10,7 +10,7 @@
     rowCount,
     ignoreBetRules,
   } from '$lib/stores/game';
-  import { isGameSettingsOpen, isLiveStatsOpen } from '$lib/stores/layout';
+  import { isWheelWindowOpen, isGameSettingsOpen, isLiveStatsOpen } from '$lib/stores/layout';
   import { BetMode, RiskLevel } from '$lib/types';
   import { flyAndScale } from '$lib/utils/transitions';
   import { Popover, Tooltip } from 'bits-ui';
@@ -18,6 +18,7 @@
   import GearSix from 'phosphor-svelte/lib/GearSix';
   import Infinity from 'phosphor-svelte/lib/Infinity';
   import Question from 'phosphor-svelte/lib/Question';
+  import GameController from 'phosphor-svelte/lib/GameController';
   import type { FormEventHandler } from 'svelte/elements';
   import { twMerge } from 'tailwind-merge';
   import { get } from 'svelte/store';
@@ -315,6 +316,29 @@
         >
           <Tooltip.Arrow />
           <p>{$isLiveStatsOpen ? 'Close' : 'Open'} Live Stats</p>
+        </Tooltip.Content>
+      </Tooltip.Root>
+     <Tooltip.Root openDelay={0} closeOnPointerDown={false}>
+        <Tooltip.Trigger asChild let:builder>
+          <button
+            use:builder.action
+            {...builder}
+            on:click={() => ($isWheelWindowOpen = !$isWheelWindowOpen)}
+            class={twMerge(
+              'rounded-full p-2 text-slate-300 transition hover:bg-slate-600 active:bg-slate-500',
+              $isWheelWindowOpen && 'text-slate-100',
+            )}
+          >
+            <GameController class="size-6" weight="bold" />
+          </button>
+        </Tooltip.Trigger>
+        <Tooltip.Content
+          transition={flyAndScale}
+          sideOffset={4}
+          class="z-30 max-w-lg rounded-md bg-white p-3 text-sm font-medium text-gray-950 drop-shadow-xl"
+        >
+          <Tooltip.Arrow />
+          <p>{$isWheelWindowOpen ? 'Close' : 'Open'} Wheel of Benevolence</p>
         </Tooltip.Content>
       </Tooltip.Root>
     </div>
