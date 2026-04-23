@@ -25,7 +25,8 @@
     "matter-js": "^0.19.0",
     "svelte-persisted-store": "^0.9.2",
     "tailwind-merge": "^2.3.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "vite-plugin-singlefile": "^2.3.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.44.0",
@@ -43,6 +44,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.35.1",
     "eslint-plugin-tailwindcss": "^3.15.1",
+    "inline-source-cli": "^2.0.0",
     "phosphor-svelte": "^2.0.1",
     "postcss": "^8.4.38",
     "prettier": "^3.1.1",
